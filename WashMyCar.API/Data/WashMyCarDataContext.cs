@@ -76,5 +76,7 @@ namespace WashMyCar.API.Data
         }
 
         public System.Data.Entity.DbSet<WashMyCar.API.Models.DayOfWeek> DayOfWeeks { get; set; }
-    }
+
+		public System.Data.Entity.DbSet<WashMyCar.API.Models.DetailerAvailability> DetailerAvailabilities { get; set; }
+	}
 }
