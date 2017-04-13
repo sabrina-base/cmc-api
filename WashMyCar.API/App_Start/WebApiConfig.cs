@@ -22,6 +22,9 @@ namespace WashMyCar.API
                 defaults: new { id = RouteParameter.Optional }
             );
 
+            // Show more detailed error messages on Azure
+            config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
+
             // Enable Cors
             config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
 

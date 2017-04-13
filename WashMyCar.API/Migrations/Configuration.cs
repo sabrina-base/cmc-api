@@ -49,12 +49,12 @@ namespace WashMyCar.API.Migrations
                 context.SaveChanges();
 
             }
-            if (context.DaysOfWeek.Count()==0)
+            if (context.DayOfWeeks.Count()==0)
             {
                 string[] weekday = new string[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday","Friday", "Saturday" };
                 for(int i= 0; i<weekday.Length; i++)
                 {
-                    context.DaysOfWeek.Add(new Models.DayOfWeek
+                    context.DayOfWeeks.Add(new Models.DayOfWeek
                     {
                         Weekday = weekday[i]
                     });
@@ -78,11 +78,12 @@ namespace WashMyCar.API.Migrations
             if (context.Services.Count() == 0)
             {
                 string[] servicetype = new string[] { "Handwash", "Handwax", "Complete Interior", "Complete Exterior", "Steam Clean Interior", "Leather Treatment", "Deluxe Detail", "Light and Rim Restoration" };
-                decimal[] cost = new decimal[] { 39.99M, 69.99M, 129.99M, 179.99M, 119.99M, 59.99M, 239.99M };
+                decimal[] cost = new decimal[] { 39.99M, 69.99M, 129.99M, 179.99M, 119.99M, 59.99M, 239.99M, 49.99M };
                 for(int i = 0; i < servicetype.Length; i++)
                 {
                     context.Services.Add(new Models.Service
                     {
+                        Detailer = context.Detailers.Find(Faker.NumberFaker.Number(1, context.Detailers.Count())),
                         ServiceType = servicetype[i],
                         Cost = cost[i]
                     });
