@@ -16,12 +16,13 @@ namespace WashMyCar.API.Data
 
         public IDbSet<Appointment> Appointments { get; set; }
         public IDbSet<Customer> Customers { get; set; }
-        public IDbSet<Models.DayOfWeek> DaysOfWeek { get; set; }
+        public IDbSet<Models.DayOfWeek> DayOfWeeks { get; set; }
         public IDbSet<Detailer> Detailers { get; set; }
         public IDbSet<DetailerAvailability> DetailersAvailability { get; set; }
         public IDbSet<Payment> Payments { get; set; }
         public IDbSet<Service> Services { get; set; }
         public IDbSet<VehicleType> VehicleTypes { get; set; }
+        public IDbSet<AppointmentService> AppointmentServices { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -74,9 +75,5 @@ namespace WashMyCar.API.Data
             modelBuilder.Entity<DetailerAvailability>()
                         .HasKey(a => new { a.DetailerId, a.DayOfWeekId });
         }
-
-        public System.Data.Entity.DbSet<WashMyCar.API.Models.DayOfWeek> DayOfWeeks { get; set; }
-
-		public System.Data.Entity.DbSet<WashMyCar.API.Models.DetailerAvailability> DetailerAvailabilities { get; set; }
-	}
+    }
 }
