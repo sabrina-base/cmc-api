@@ -18,7 +18,7 @@ namespace WashMyCar.API.Data
         public IDbSet<Customer> Customers { get; set; }
         public IDbSet<Models.DayOfWeek> DayOfWeeks { get; set; }
         public IDbSet<Detailer> Detailers { get; set; }
-        public IDbSet<DetailerAvailability> DetailersAvailability { get; set; }
+        public IDbSet<DetailerAvailability> DetailerAvailabilities { get; set; }
         public IDbSet<Payment> Payments { get; set; }
         public IDbSet<Service> Services { get; set; }
         public IDbSet<VehicleType> VehicleTypes { get; set; }
@@ -75,6 +75,5 @@ namespace WashMyCar.API.Data
             modelBuilder.Entity<DetailerAvailability>()
                         .HasKey(a => new { a.DetailerId, a.DayOfWeekId });
         }
-        
     }
 }
