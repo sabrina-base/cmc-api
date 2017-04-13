@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using WashMyCar.API.Migrations;
 using WashMyCar.API.Models;
 
 namespace WashMyCar.API.Data
@@ -11,7 +12,9 @@ namespace WashMyCar.API.Data
     {
         public WashMyCarDataContext() : base("WashMyCar")
         {
-
+            Database.SetInitializer(
+                new MigrateDatabaseToLatestVersion<WashMyCarDataContext, Configuration>()
+            );
         }
 
         public IDbSet<Appointment> Appointments { get; set; }
