@@ -49,12 +49,12 @@ namespace WashMyCar.API.Migrations
                 context.SaveChanges();
 
             }
-            if (context.DaysOfWeek.Count()==0)
+            if (context.DayOfWeeks.Count()==0)
             {
                 string[] weekday = new string[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday","Friday", "Saturday" };
                 for(int i= 0; i<weekday.Length; i++)
                 {
-                    context.DaysOfWeek.Add(new Models.DayOfWeek
+                    context.DayOfWeeks.Add(new Models.DayOfWeek
                     {
                         Weekday = weekday[i]
                     });
