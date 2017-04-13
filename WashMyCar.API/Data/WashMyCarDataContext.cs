@@ -22,6 +22,7 @@ namespace WashMyCar.API.Data
         public IDbSet<Payment> Payments { get; set; }
         public IDbSet<Service> Services { get; set; }
         public IDbSet<VehicleType> VehicleTypes { get; set; }
+        public IDbSet<AppointmentService> AppointmentServices { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -75,6 +76,6 @@ namespace WashMyCar.API.Data
                         .HasKey(a => new { a.DetailerId, a.DayOfWeekId });
         }
 
-        public System.Data.Entity.DbSet<WashMyCar.API.Models.DayOfWeek> DayOfWeeks { get; set; }
+       
     }
 }
