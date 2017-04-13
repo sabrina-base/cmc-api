@@ -18,9 +18,20 @@ namespace WashMyCar.API.Controllers
         private WashMyCarDataContext db = new WashMyCarDataContext();
 
         // GET: api/Customers
-        public IQueryable<Customer> GetCustomers()
+        public IHttpActionResult GetCustomers()
         {
-            return db.Customers;
+            var resultSet = db.Customers.Select(customer => new
+            {
+                customer.CustomerId,
+                customer.FirstName,
+                customer.LastName,
+                customer.Address,
+                customer.EmailAddress,
+                customer.Cellphone,
+                customer.Latitude,
+                customer.Longitude
+            });
+            return Ok(resultSet);
         }
 
         // GET: api/Customers/5
@@ -33,7 +44,17 @@ namespace WashMyCar.API.Controllers
                 return NotFound();
             }
 
-            return Ok(customer);
+            return Ok(new
+            {
+                customer.CustomerId,
+                customer.FirstName,
+                customer.LastName,
+                customer.Address,
+                customer.EmailAddress,
+                customer.Cellphone,
+                customer.Latitude,
+                customer.Longitude
+            });
         }
 
         // PUT: api/Customers/5
@@ -50,7 +71,17 @@ namespace WashMyCar.API.Controllers
                 return BadRequest();
             }
 
-            db.Entry(customer).State = EntityState.Modified;
+            var dbCustomer = db.Customers.Find(id);
+            dbCustomer.CustomerId = customer.CustomerId;
+            dbCustomer.FirstName = customer.FirstName;
+            dbCustomer.LastName = customer.LastName;
+            dbCustomer.Address = customer.Address;
+            dbCustomer.EmailAddress = customer.EmailAddress;
+            dbCustomer.Cellphone = customer.Cellphone;
+            dbCustomer.Latitude = customer.Latitude;
+            dbCustomer.Longitude = customer.Longitude;
+
+            db.Entry(dbCustomer).State = EntityState.Modified;
 
             try
             {
@@ -83,7 +114,17 @@ namespace WashMyCar.API.Controllers
             db.Customers.Add(customer);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = customer.CustomerId }, customer);
+            return CreatedAtRoute("DefaultApi", new { id = customer.CustomerId }, new
+            {
+                customer.CustomerId,
+                customer.FirstName,
+                customer.LastName,
+                customer.Address,
+                customer.EmailAddress,
+                customer.Cellphone,
+                customer.Latitude,
+                customer.Longitude
+            });
         }
 
         // DELETE: api/Customers/5
