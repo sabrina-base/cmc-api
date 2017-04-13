@@ -75,6 +75,6 @@ namespace WashMyCar.API.Data
                         .HasKey(a => new { a.DetailerId, a.DayOfWeekId });
         }
 
-        public System.Data.Entity.DbSet<WashMyCar.API.Models.DayOfWeek> DayOfWeeks { get; set; }
+        //public System.Data.Entity.DbSet<WashMyCar.API.Models.DayOfWeek> DayOfWeeks { get; set; }
     }
 }
