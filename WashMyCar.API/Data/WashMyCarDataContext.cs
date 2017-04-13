@@ -11,7 +11,7 @@ namespace WashMyCar.API.Data
     {
         public WashMyCarDataContext() : base("WashMyCar")
         {
-         
+
         }
 
         public IDbSet<Appointment> Appointments { get; set; }

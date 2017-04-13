@@ -20,7 +20,7 @@ namespace WashMyCar.API.Controllers
         // GET: api/DayOfWeeks
         public IHttpActionResult GetDayOfWeeks()
         {
-            var resultSet = db.DayOfWeeks.Select(dayOfWeek => new
+            var resultSet = db.DaysOfWeek.Select(dayOfWeek => new
             {
                 dayOfWeek.DayOfWeekId,
                 dayOfWeek.Weekday
