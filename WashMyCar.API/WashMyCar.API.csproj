@@ -104,6 +104,7 @@
     <Compile Include="Controllers\AppointmentServicesController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\DayOfWeeksController.cs" />
+    <Compile Include="Controllers\DetailersController.cs" />
     <Compile Include="Controllers\ServicesController.cs" />
     <Compile Include="Controllers\DetailerAvailabilitiesController.cs" />
     <Compile Include="Controllers\VehicleTypesController.cs" />
