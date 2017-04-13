@@ -102,6 +102,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\DayOfWeeksController.cs" />
+    <Compile Include="Controllers\PaymentsController.cs" />
     <Compile Include="Controllers\VehicleTypesController.cs" />
     <Compile Include="Data\WashMyCarDataContext.cs" />
     <Compile Include="Global.asax.cs">
