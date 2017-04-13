@@ -33,7 +33,7 @@ namespace WashMyCar.API.Controllers
                 return BadRequest();
             }
 
-			var dbDetailerAvailability = db.DetailersAvailability.Find(detailerId, dayOfWeekId);
+			var dbDetailerAvailability = db.DetailerAvailabilities.Find(detailerId, dayOfWeekId);
 
 			dbDetailerAvailability.Start = detailerAvailability.Start;
 			dbDetailerAvailability.End = detailerAvailability.End;
