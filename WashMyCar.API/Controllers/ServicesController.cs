@@ -15,7 +15,7 @@ namespace WashMyCar.API.Controllers
 {
     public class ServicesController : ApiController
     {
-        private WashMyCarDataContext db = new WashMyCarDataContext();
+        private Data.WashMyCarDataContext db = new Data.WashMyCarDataContext();
 
         // GET: api/Services
         public IHttpActionResult GetServices()

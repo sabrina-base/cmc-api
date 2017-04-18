@@ -15,7 +15,7 @@ namespace WashMyCar.API.Controllers
 {
     public class DayOfWeeksController : ApiController
     {
-        private WashMyCarDataContext db = new WashMyCarDataContext();
+        private Data.WashMyCarDataContext db = new Data.WashMyCarDataContext();
 
         // GET: api/DayOfWeeks
         public IHttpActionResult GetDayOfWeeks()

@@ -7,13 +7,13 @@ namespace WashMyCar.API.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class secondmigration : IMigrationMetadata
+    public sealed partial class InitialMigration : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(secondmigration));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialMigration));
         
         string IMigrationMetadata.Id
         {
-            get { return "201704112251072_secondmigration"; }
+            get { return "201704182145437_InitialMigration"; }
         }
         
         string IMigrationMetadata.Source

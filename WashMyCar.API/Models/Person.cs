@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web;
 
@@ -14,7 +15,6 @@ namespace WashMyCar.API.Models
         public string EmailAddress { get; set; }
         public string Cellphone { get; set; }
         public string Address { get; set; }
-        public double? Latitude { get; set; }
-        public double? Longitude { get; set; }
+        public DbGeography Location { get; set; }
     }
 }

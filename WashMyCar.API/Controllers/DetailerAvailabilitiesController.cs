@@ -15,7 +15,7 @@ namespace WashMyCar.API.Controllers
 {
     public class DetailerAvailabilitiesController : ApiController
     {
-        private WashMyCarDataContext db = new WashMyCarDataContext();
+        private Data.WashMyCarDataContext db = new Data.WashMyCarDataContext();
 
         // PUT: api/DetailerAvailabilities/5/5
         [ResponseType(typeof(void))]

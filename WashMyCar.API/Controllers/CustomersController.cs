@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -10,12 +11,13 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using WashMyCar.API.Data;
 using WashMyCar.API.Models;
+using WashMyCar.API.Utility;
 
 namespace WashMyCar.API.Controllers
 {
     public class CustomersController : ApiController
     {
-        private WashMyCarDataContext db = new WashMyCarDataContext();
+        private Data.WashMyCarDataContext db = new Data.WashMyCarDataContext();
 
         // GET: api/Customers
         public IHttpActionResult GetCustomers()
@@ -28,8 +30,7 @@ namespace WashMyCar.API.Controllers
                 customer.Address,
                 customer.EmailAddress,
                 customer.Cellphone,
-                customer.Latitude,
-                customer.Longitude
+                customer.Location
             });
             return Ok(resultSet);
         }
@@ -52,8 +53,7 @@ namespace WashMyCar.API.Controllers
                 customer.Address,
                 customer.EmailAddress,
                 customer.Cellphone,
-                customer.Latitude,
-                customer.Longitude
+                customer.Location
             });
         }
 
@@ -78,8 +78,7 @@ namespace WashMyCar.API.Controllers
             dbCustomer.Address = customer.Address;
             dbCustomer.EmailAddress = customer.EmailAddress;
             dbCustomer.Cellphone = customer.Cellphone;
-            dbCustomer.Latitude = customer.Latitude;
-            dbCustomer.Longitude = customer.Longitude;
+            dbCustomer.Location = LocationConverter.GeocodeAddress(dbCustomer.Address);
 
             db.Entry(dbCustomer).State = EntityState.Modified;
 
@@ -102,31 +101,7 @@ namespace WashMyCar.API.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Customers
-        [ResponseType(typeof(Customer))]
-        public IHttpActionResult PostCustomer(Customer customer)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.Customers.Add(customer);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = customer.CustomerId }, new
-            {
-                customer.CustomerId,
-                customer.FirstName,
-                customer.LastName,
-                customer.Address,
-                customer.EmailAddress,
-                customer.Cellphone,
-                customer.Latitude,
-                customer.Longitude
-            });
-        }
-
+     
         // DELETE: api/Customers/5
         [ResponseType(typeof(Customer))]
         public IHttpActionResult DeleteCustomer(int id)
