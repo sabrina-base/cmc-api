@@ -15,5 +15,7 @@ namespace WashMyCar.API.Models
         public virtual ICollection<DetailerAvailability> DetailersAvailability { get; set; }
         public virtual ICollection<Service> Services { get; set; }
         public virtual ICollection<Appointment> Appointments { get; set; }
+
+        public virtual User User { get; set; }
     }
 }

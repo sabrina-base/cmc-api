@@ -4,6 +4,7 @@ namespace WashMyCar.API.Models
 {
     public class User : IdentityUser
     {
-        // custom fields + relationships go here
+        public virtual Customer Customer { get; set; }
+        public virtual Detailer Detailer { get; set; }
     }
 }

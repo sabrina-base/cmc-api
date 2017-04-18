@@ -68,8 +68,18 @@ namespace WashMyCar.API.Data
                 .WithRequired(appointment => appointment.VehicleType)
                 .HasForeignKey(appointment => appointment.VehicleTypeId);
 
-            // Configure the compound keys
-            modelBuilder.Entity<AppointmentService>()
+            modelBuilder.Entity<User>()
+               .HasOptional(user => user.Detailer)
+               .WithOptionalDependent(detailer => detailer.User)
+               .Map(m => m.MapKey("DetailerId"));
+
+            modelBuilder.Entity<User>()
+                .HasOptional(user => user.Customer)
+                .WithOptionalDependent(customer => customer.User)
+                .Map(m => m.MapKey("CustomerId"));
+
+        // Configure the compound keys
+        modelBuilder.Entity<AppointmentService>()
                         .HasKey(a => new { a.AppointmentId, a.ServiceId });
 
             modelBuilder.Entity<DetailerAvailability>()

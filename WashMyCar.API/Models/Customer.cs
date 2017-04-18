@@ -13,5 +13,6 @@ namespace WashMyCar.API.Models
 
         // navigation properties
         public virtual ICollection<Appointment> Appointments { get; set; }
+        public virtual User User { get; set; }
     }
 }
