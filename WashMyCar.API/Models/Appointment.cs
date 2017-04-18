@@ -13,6 +13,8 @@ namespace WashMyCar.API.Models
         public DateTime AppointmentDate { get; set; }
         public int CustomerId { get; set; }
         public int DetailerId { get; set; }
+        public DateTime? ConfirmedDate { get; set; }
+        public DateTime? CancelledDate { get; set; }
 
         // computed properties
         public decimal TotalCost

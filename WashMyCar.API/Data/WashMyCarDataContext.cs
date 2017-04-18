@@ -68,11 +68,13 @@ namespace WashMyCar.API.Data
                 .WithRequired(appointment => appointment.VehicleType)
                 .HasForeignKey(appointment => appointment.VehicleTypeId);
 
+            // 1-to-1: User -> Customer
             modelBuilder.Entity<User>()
                .HasOptional(user => user.Detailer)
                .WithOptionalDependent(detailer => detailer.User)
                .Map(m => m.MapKey("DetailerId"));
 
+            // 1-to-1: User -> Detailer
             modelBuilder.Entity<User>()
                 .HasOptional(user => user.Customer)
                 .WithOptionalDependent(customer => customer.User)
