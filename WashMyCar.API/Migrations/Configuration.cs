@@ -1,9 +1,14 @@
 namespace WashMyCar.API.Migrations
 {
+    using Microsoft.Owin;
+    using Microsoft.Owin.Security.OAuth;
+    using System.Web.Http.Owin;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
+    using Owin;
+    using WashMyCar.Api.Providers;
 
     internal sealed class Configuration : DbMigrationsConfiguration<WashMyCar.API.Data.WashMyCarDataContext>
     {
@@ -12,11 +17,13 @@ namespace WashMyCar.API.Migrations
             AutomaticMigrationsEnabled = false;
         }
 
+        
+
         protected override void Seed(WashMyCar.API.Data.WashMyCarDataContext context)
         {
             if (context.Customers.Count() == 0)
             {
-                for(int i = 0; i < 20; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     var address = Faker.LocationFaker.StreetNumber() + " " + Faker.LocationFaker.StreetName() + ", " + Faker.LocationFaker.City() + Faker.LocationFaker.ZipCode();
                     context.Customers.Add(new Models.Customer
@@ -28,13 +35,13 @@ namespace WashMyCar.API.Migrations
                         Address = address
 
                     });
-                        
+
                 }
                 context.SaveChanges();
             }
-            if (context.Detailers.Count()== 0)
+            if (context.Detailers.Count() == 0)
             {
-                for(int i = 0; i < 20; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     var address = Faker.LocationFaker.StreetNumber() + " " + Faker.LocationFaker.StreetName() + ", " + Faker.LocationFaker.City() + Faker.LocationFaker.ZipCode();
                     context.Detailers.Add(new Models.Detailer

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
-using System.Linq;
-using System.Web;
-using WashMyCar.API.Migrations;
 using WashMyCar.API.Models;
+using WashMyCar.API.Migrations;
 
 namespace WashMyCar.API.Data
 {
-    public class WashMyCarDataContext : DbContext
+    public class WashMyCarDataContext : IdentityDbContext<User>
     {
         public WashMyCarDataContext() : base("WashMyCar")
         {
@@ -77,6 +74,8 @@ namespace WashMyCar.API.Data
 
             modelBuilder.Entity<DetailerAvailability>()
                         .HasKey(a => new { a.DetailerId, a.DayOfWeekId });
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

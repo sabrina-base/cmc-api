@@ -25,9 +25,6 @@ namespace WashMyCar.API
             // Show more detailed error messages on Azure
             config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 
-            // Enable Cors
-            config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
-
             // CamelCase Reformatting
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver =
                 new CamelCasePropertyNamesContractResolver();

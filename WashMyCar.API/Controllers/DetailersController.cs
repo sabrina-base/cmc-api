@@ -15,7 +15,7 @@ namespace WashMyCar.API.Controllers
 {
     public class DetailersController : ApiController
     {
-        private WashMyCarDataContext db = new WashMyCarDataContext();
+        private Data.WashMyCarDataContext db = new Data.WashMyCarDataContext();
 
         // GET: api/Detailers
         public IHttpActionResult GetDetailers()
@@ -30,7 +30,7 @@ namespace WashMyCar.API.Controllers
         }
 
         // GET: api/Detailers/5
-        [ResponseType(typeof(Detailer))]
+        [Authorize, ResponseType(typeof(Detailer))]
         public IHttpActionResult GetDetailer(int id)
         {
             Detailer detailer = db.Detailers.Find(id);
