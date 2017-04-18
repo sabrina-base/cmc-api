@@ -2,6 +2,7 @@
 using System.Data.Entity;
 using WashMyCar.API.Models;
 using WashMyCar.API.Migrations;
+using System.Data.Entity.SqlServer;
 
 namespace WashMyCar.API.Data
 {
@@ -9,6 +10,9 @@ namespace WashMyCar.API.Data
     {
         public WashMyCarDataContext() : base("WashMyCar")
         {
+            SqlProviderServices.SqlServerTypesAssemblyName =
+                "Microsoft.SqlServer.Types, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91";
+
             Database.SetInitializer(
                 new MigrateDatabaseToLatestVersion<WashMyCarDataContext, Configuration>()
             );
@@ -19,7 +23,6 @@ namespace WashMyCar.API.Data
         public IDbSet<Models.DayOfWeek> DayOfWeeks { get; set; }
         public IDbSet<Detailer> Detailers { get; set; }
         public IDbSet<DetailerAvailability> DetailerAvailabilities { get; set; }
-        public IDbSet<Payment> Payments { get; set; }
         public IDbSet<Service> Services { get; set; }
         public IDbSet<VehicleType> VehicleTypes { get; set; }
         public IDbSet<AppointmentService> AppointmentServices { get; set; }
@@ -27,11 +30,6 @@ namespace WashMyCar.API.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             // customer has many sales
-            modelBuilder.Entity<Appointment>()
-                .HasMany(appointment => appointment.Payments)
-                .WithRequired(payment => payment.Appointment)
-                .HasForeignKey(payment => payment.AppointmentId);
-
             modelBuilder.Entity<Appointment>()
               .HasMany(appointment => appointment.AppointmentServices)
               .WithRequired(service => service.Appointment)
@@ -49,13 +47,13 @@ namespace WashMyCar.API.Data
                 .HasForeignKey(detailersAvailability => detailersAvailability.DayOfWeekId);
 
             modelBuilder.Entity<Detailer>()
-                .HasMany(detailer => detailer.DetailersAvailability)
+                .HasMany(detailer => detailer.DetailerAvailabilities)
                 .WithRequired(detailersAvailability => detailersAvailability.Detailer)
                 .HasForeignKey(detailersAvailability => detailersAvailability.DetailerId);
 
             modelBuilder.Entity<Detailer>()
                 .HasMany(detailer => detailer.Services)
-                .WithRequired(service => service.Detailer)
+                .WithOptional(service => service.Detailer)
                 .HasForeignKey(service => service.DetailerId);
 
             modelBuilder.Entity<Detailer>()
@@ -68,11 +66,13 @@ namespace WashMyCar.API.Data
                 .WithRequired(appointment => appointment.VehicleType)
                 .HasForeignKey(appointment => appointment.VehicleTypeId);
 
+            // 1-to-1: User -> Detailer
             modelBuilder.Entity<User>()
                .HasOptional(user => user.Detailer)
                .WithOptionalDependent(detailer => detailer.User)
                .Map(m => m.MapKey("DetailerId"));
 
+            // 1-to-1: User -> Customer
             modelBuilder.Entity<User>()
                 .HasOptional(user => user.Customer)
                 .WithOptionalDependent(customer => customer.User)

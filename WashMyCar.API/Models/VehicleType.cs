@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace WashMyCar.API.Models
 {
     public class VehicleType
     {
+        public VehicleType()
+        {
+            Appointments = new Collection<Appointment>();
+        }
+
         //scalar properties
         public int VehicleTypeId { get; set; }
         public string VehicleSize { get; set; }
