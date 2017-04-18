@@ -9,6 +9,7 @@ namespace WashMyCar.API.Migrations
     using System.Linq;
     using Owin;
     using WashMyCar.Api.Providers;
+    using Microsoft.AspNet.Identity.EntityFramework;
 
     internal sealed class Configuration : DbMigrationsConfiguration<WashMyCar.API.Data.WashMyCarDataContext>
     {
@@ -96,6 +97,20 @@ namespace WashMyCar.API.Migrations
                     });
 
                 }
+                context.SaveChanges();
+            }
+            if (context.Roles.Count() == 0)
+            {
+                context.Roles.Add(new IdentityRole
+                {
+                    Name = "Detailer"
+                });
+
+                context.Roles.Add(new IdentityRole
+                {
+                    Name = "Customer"
+                });
+
                 context.SaveChanges();
             }
         }
