@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Web;
 
@@ -7,12 +8,25 @@ namespace WashMyCar.API.Models
 {
     public class Detailer : Person
     {
+        public Detailer()
+        {
+            DetailerAvailabilities = new Collection<DetailerAvailability>();
+            Services = new Collection<Service>();
+            Appointments = new Collection<Appointment>();
+        }
+
         //Scalar Properties
         public int DetailerId { get; set; }
-        public decimal Rating { get; set; }
+        public double Rating
+        {
+            get
+            {
+                return Math.Round(Appointments.Average(a => a.Rating).GetValueOrDefault(), 1);
+            }
+        }
 
         //Navigation Properties
-        public virtual ICollection<DetailerAvailability> DetailersAvailability { get; set; }
+        public virtual ICollection<DetailerAvailability> DetailerAvailabilities { get; set; }
         public virtual ICollection<Service> Services { get; set; }
         public virtual ICollection<Appointment> Appointments { get; set; }
 

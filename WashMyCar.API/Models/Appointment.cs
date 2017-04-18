@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Web;
 
@@ -7,6 +8,11 @@ namespace WashMyCar.API.Models
 {
     public class Appointment 
     {
+        public Appointment()
+        {
+            this.AppointmentServices = new Collection<AppointmentService>();
+        }
+
         //scalar properties
         public int AppointmentId { get; set; }
         public int VehicleTypeId { get; set; }
@@ -15,6 +21,7 @@ namespace WashMyCar.API.Models
         public int DetailerId { get; set; }
         public DateTime? ConfirmedDate { get; set; }
         public DateTime? CancelledDate { get; set; }
+        public int? Rating { get; set; }
 
         // computed properties
         public decimal TotalCost
@@ -24,22 +31,6 @@ namespace WashMyCar.API.Models
                 return AppointmentServices.Sum(s => s.Service.Cost);
             }
         }
-        public decimal Outstanding
-        {
-            get
-            {
-                var totalPaid = Payments.Sum(p => p.AmountReceived);
-
-                return TotalCost - totalPaid;
-            }
-        }
-        public bool HasPaid
-        {
-            get
-            {
-                return Outstanding > 0;
-            }
-        }
 
         // Navigation Properties
         public virtual VehicleType VehicleType { get; set; }
@@ -47,6 +38,5 @@ namespace WashMyCar.API.Models
         public virtual Detailer Detailer { get; set; }
 
         public virtual ICollection<AppointmentService> AppointmentServices { get; set; }
-        public virtual ICollection<Payment> Payments { get; set; }
     }
 }

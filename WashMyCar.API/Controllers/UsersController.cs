@@ -4,6 +4,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Web.Http;
 using WashMyCar.API.Data;
 using System.Data.Entity.Spatial;
+using WashMyCar.API.Utility;
 
 namespace WashMyCar.API.Controllers
 {
@@ -40,15 +41,10 @@ namespace WashMyCar.API.Controllers
                 Cellphone = registration.Cellphone,
                 EmailAddress = registration.EmailAddress,
                 FirstName = registration.FirstName,
-                LastName = registration.LastName
+                LastName = registration.LastName,
+                Location = LocationConverter.GeocodeAddress(registration.Address)
             };
-
-            var geocoderService = new Geocoder.GeocodeService();
-
-            var customerLocation = geocoderService.GeocodeLocation(registration.Address);
-
-            customer.Location = DbGeography.FromText($"POINT({customerLocation.Longitude}, {customerLocation.Latitude})");
-
+            
             user.Customer = customer;
 
             var result = _userManager.Create(user, registration.Password);
@@ -65,8 +61,8 @@ namespace WashMyCar.API.Controllers
 
         // POST: api/users/register
         [AllowAnonymous]
-        [Route("api/users/registerCustomer")]
-        public IHttpActionResult RegisterCustomer(RegistrationModel registration)
+        [Route("api/users/registerDetailer")]
+        public IHttpActionResult RegisterDetailer(RegistrationModel registration)
         {
             if (!ModelState.IsValid)
             {
@@ -84,15 +80,10 @@ namespace WashMyCar.API.Controllers
                 Cellphone = registration.Cellphone,
                 EmailAddress = registration.EmailAddress,
                 FirstName = registration.FirstName,
-                LastName = registration.LastName
+                LastName = registration.LastName,
+                Location = LocationConverter.GeocodeAddress(registration.Address)
             };
-
-            var geocoderService = new Geocoder.GeocodeService();
-
-            var detailerLocation = geocoderService.GeocodeLocation(registration.Address);
-
-            detailer.Location = DbGeography.FromText($"POINT({detailerLocation.Longitude}, {detailerLocation.Latitude})");
-
+            
             user.Detailer = detailer;
 
             var result = _userManager.Create(user, registration.Password);

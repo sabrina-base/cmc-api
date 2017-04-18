@@ -62,7 +62,6 @@ namespace WashMyCar.API.Controllers
 
             var dbDetailer = db.Detailers.Find(id);
             dbDetailer.DetailerId = detailer.DetailerId;
-            dbDetailer.Rating = detailer.Rating;
 
             db.Entry(dbDetailer).State = EntityState.Modified;
 

@@ -10,6 +10,10 @@ namespace WashMyCar.API.Migrations
     using Owin;
     using WashMyCar.Api.Providers;
     using Microsoft.AspNet.Identity.EntityFramework;
+    using WashMyCar.API.Models;
+    using Microsoft.AspNet.Identity;
+    using System.Data.Entity.Spatial;
+    using WashMyCar.API.Utility;
 
     internal sealed class Configuration : DbMigrationsConfiguration<WashMyCar.API.Data.WashMyCarDataContext>
     {
@@ -22,40 +26,31 @@ namespace WashMyCar.API.Migrations
 
         protected override void Seed(WashMyCar.API.Data.WashMyCarDataContext context)
         {
-            if (context.Customers.Count() == 0)
+            var userStore = new UserStore<User>(context);
+            var userManager = new UserManager<User>(userStore);
+
+            string[] addresses = new string[]
             {
-                for (int i = 0; i < 5; i++)
-                {
-                    var address = Faker.LocationFaker.StreetNumber() + " " + Faker.LocationFaker.StreetName() + ", " + Faker.LocationFaker.City() + Faker.LocationFaker.ZipCode();
-                    context.Customers.Add(new Models.Customer
-                    {
-                        EmailAddress = Faker.InternetFaker.Email(),
-                        FirstName = Faker.NameFaker.FirstName(),
-                        LastName = Faker.NameFaker.LastName(),
-                        Cellphone = Faker.PhoneFaker.Phone(),
-                        Address = address
+                "101 W Broadway, San Diego CA 92101",
+                "13030 Salmon River Road, San Diego CA 92129",
+                "1930 Georgia Court, San Diego CA 92104",
+                "3872 Jewell Street, San Diego CA 92109",
+                "47 Southfield Road, Pocklington, York YO42 2XE"
+            };
 
-                    });
-
-                }
-                context.SaveChanges();
-            }
-            if (context.Detailers.Count() == 0)
+            if (context.Roles.Count() == 0)
             {
-                for (int i = 0; i < 5; i++)
+                context.Roles.Add(new IdentityRole
                 {
-                    var address = Faker.LocationFaker.StreetNumber() + " " + Faker.LocationFaker.StreetName() + ", " + Faker.LocationFaker.City() + Faker.LocationFaker.ZipCode();
-                    context.Detailers.Add(new Models.Detailer
-                    {
-                        Rating = Faker.NumberFaker.Number(1, 5),
-                        FirstName = Faker.NameFaker.FirstName(),
-                        LastName = Faker.NameFaker.LastName(),
-                        Cellphone = Faker.PhoneFaker.Phone(),
-                        Address = address
-                    });
-                }
-                context.SaveChanges();
+                    Name = "Detailer"
+                });
 
+                context.Roles.Add(new IdentityRole
+                {
+                    Name = "Customer"
+                });
+
+                context.SaveChanges();
             }
             if (context.DayOfWeeks.Count()==0)
             {
@@ -83,37 +78,117 @@ namespace WashMyCar.API.Migrations
                 }
                 context.SaveChanges();
             }
-            if (context.Services.Count() == 0)
+            if (context.Customers.Count() == 0)
             {
-                string[] servicetype = new string[] { "Handwash", "Handwax", "Complete Interior", "Complete Exterior", "Steam Clean Interior", "Leather Treatment", "Deluxe Detail", "Light and Rim Restoration" };
-                decimal[] cost = new decimal[] { 39.99M, 69.99M, 129.99M, 179.99M, 119.99M, 59.99M, 239.99M, 49.99M };
-                for(int i = 0; i < servicetype.Length; i++)
+                for (int i = 0; i < 5; i++)
                 {
-                    context.Services.Add(new Models.Service
+                    string email = Faker.InternetFaker.Email();
+                    string phone = Faker.PhoneFaker.Phone();
+
+                    userManager.Create(new User
                     {
-                        Detailer = context.Detailers.Find(Faker.NumberFaker.Number(1, context.Detailers.Count())),
-                        ServiceType = servicetype[i],
-                        Cost = cost[i]
-                    });
+                        Email = email,
+                        PhoneNumber = phone,
+                        UserName = $"customer{i + 1}",
+                        Customer = new Customer
+                        {
+                            Cellphone = phone,
+                            EmailAddress = email,
+                            FirstName = Faker.NameFaker.FirstName(),
+                            LastName = Faker.NameFaker.LastName(),
+                            Address = addresses[i],
+                            Location = LocationConverter.GeocodeAddress(addresses[i])
+                        }
 
+                    }, "password123");
                 }
-                context.SaveChanges();
             }
-            if (context.Roles.Count() == 0)
+            if (context.Detailers.Count() == 0)
             {
-                context.Roles.Add(new IdentityRole
+                for (int i = 0; i < 5; i++)
                 {
-                    Name = "Detailer"
-                });
+                    string email = Faker.InternetFaker.Email();
+                    string phone = Faker.PhoneFaker.Phone();
 
-                context.Roles.Add(new IdentityRole
+                    var detailer = new Detailer
+                    {
+                        Cellphone = phone,
+                        EmailAddress = email,
+                        FirstName = Faker.NameFaker.FirstName(),
+                        LastName = Faker.NameFaker.LastName(),
+                        Address = addresses[i],
+                        Location = LocationConverter.GeocodeAddress(addresses[i])
+                    };
+
+                    // availability
+                    for (int j = 2; j < 7; j++)
+                    {
+                        detailer.DetailerAvailabilities.Add(new DetailerAvailability
+                        {
+                            DayOfWeekId = j,
+                            Start = 9,
+                            End = 5
+                        });
+                    }
+
+                    // services
+                    string[] servicetype = new string[] { "Handwash", "Handwax", "Complete Interior", "Complete Exterior", "Steam Clean Interior", "Leather Treatment", "Deluxe Detail", "Light and Rim Restoration" };
+                    decimal[] cost = new decimal[] { 39.99M, 69.99M, 129.99M, 179.99M, 119.99M, 59.99M, 239.99M, 49.99M };
+
+                    for(int j = 0; j < Faker.NumberFaker.Number(1,servicetype.Length); j++)
+                    {
+                        detailer.Services.Add(new Service
+                        {
+                            Cost = cost[j],
+                            ServiceType = servicetype[j]
+                        });   
+                    }
+
+                    userManager.Create(new User
+                    {
+                        Email = email,
+                        PhoneNumber = phone,
+                        UserName = $"detailer{i + 1}",
+                        Detailer = detailer
+                    }, "password123");
+                }
+            }
+            if (context.Appointments.Count() == 0)
+            {
+                foreach (var detailer in context.Detailers)
                 {
-                    Name = "Customer"
-                });
+                    var randomNumber = Faker.NumberFaker.Number(1, context.Customers.Count());
+
+                    for (int i = 0; i < randomNumber; i++)
+                    {
+                        var apptDate = DateTime.Now.AddDays(Faker.NumberFaker.Number(-14, 14));
+
+                        var appt = new Appointment
+                        {
+                            AppointmentDate = apptDate,
+                            CancelledDate = Faker.BooleanFaker.Boolean() ? (DateTime?)apptDate.AddDays(-3) : null,
+                            ConfirmedDate = Faker.BooleanFaker.Boolean() ? (DateTime?)apptDate.AddDays(-3) : null,
+                            CustomerId = Faker.NumberFaker.Number(1, context.Customers.Count()),
+                            Detailer = detailer,
+                            VehicleTypeId = Faker.NumberFaker.Number(1, context.VehicleTypes.Count()),
+                            Rating = Faker.BooleanFaker.Boolean() ? (int?)Faker.NumberFaker.Number(1,5) : null
+                        };
+
+                        // services
+                        for(int j = 0; j < Faker.NumberFaker.Number(1, detailer.Services.Count); j++)
+                        {
+                            appt.AppointmentServices.Add(new AppointmentService
+                            {
+                                Service = detailer.Services.ToArray()[j]
+                            });
+                        }
+
+                        context.Appointments.Add(appt);
+                    }
+                }
 
                 context.SaveChanges();
             }
         }
-
     }
 }
