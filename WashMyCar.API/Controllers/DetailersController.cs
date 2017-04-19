@@ -10,6 +10,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using WashMyCar.API.Data;
 using WashMyCar.API.Models;
+using WashMyCar.API.Utility;
 
 namespace WashMyCar.API.Controllers
 {
@@ -20,18 +21,33 @@ namespace WashMyCar.API.Controllers
         // GET: api/Detailers
         public IHttpActionResult GetDetailers()
         {
-            var resultSet = db.Detailers.Select(detailer => new
+            var resultSet = db.Detailers.ToArray().Select(detailer => new
             {
                 detailer.DetailerId,
                 detailer.Rating,
                 detailer.Address,
                 detailer.EmailAddress,
-                detailer.DetailerAvailabilities,
                 detailer.Cellphone,
                 detailer.FirstName,
                 detailer.LastName,
-                detailer.Services,
-                detailer.Location
+                Availability = detailer.DetailerAvailabilities.Select(da => new
+                {
+                    DayOfWeek = da.DayOfWeek.Weekday,
+                    da.DayOfWeekId,
+                    da.DetailerId,
+                    da.Start,
+                    da.End
+                }),
+                Services = detailer.Services.Select(s => new
+                {
+                    s.Cost,
+                    s.ServiceType
+                }),
+                Location = new
+                {
+                    detailer.Location.Latitude,
+                    detailer.Location.Longitude
+                }
             });
 
             return Ok(resultSet);
@@ -41,6 +57,7 @@ namespace WashMyCar.API.Controllers
         [ResponseType(typeof(Detailer))]
         public IHttpActionResult GetDetailer(int id)
         {
+            
             Detailer detailer = db.Detailers.Find(id);
             if (detailer == null)
             {
@@ -53,12 +70,27 @@ namespace WashMyCar.API.Controllers
                 detailer.Rating,
                 detailer.Address,
                 detailer.EmailAddress,
-                detailer.DetailerAvailabilities,
                 detailer.Cellphone,
+                Availability = detailer.DetailerAvailabilities.Select(da => new
+                {
+                    DayOfWeek = da.DayOfWeek.Weekday,
+                    da.Start,
+                    da.DayOfWeekId,
+                    da.DetailerId,
+                    da.End
+                }),
                 detailer.FirstName,
                 detailer.LastName,
-                detailer.Services,
-                detailer.Location
+                Services = detailer.Services.Select(s => new
+                {
+                    s.Cost,
+                    s.ServiceType
+                }),
+                Location = new
+                {
+                    detailer.Location.Latitude,
+                    detailer.Location.Longitude
+                }
             });
         }
 
@@ -82,10 +114,18 @@ namespace WashMyCar.API.Controllers
             dbDetailer.LastName = detailer.LastName;
             dbDetailer.Address = detailer.Address;
             dbDetailer.EmailAddress = detailer.EmailAddress;
-            dbDetailer.DetailerAvailabilities = detailer.DetailerAvailabilities;
+            // Loops over the incoming availabilities
+            foreach (var Availability in detailer.DetailerAvailabilities)
+            {
+                // For each on grab databases version of availability
+                var dbAvailability = dbDetailer.DetailerAvailabilities.FirstOrDefault(avail => avail.DetailerId == Availability.DetailerId && avail.DayOfWeekId == Availability.DayOfWeekId);
+                // Update databases version with new info
+                dbAvailability.Start = Availability.Start;
+                dbAvailability.End = Availability.End;
+
+            }
             dbDetailer.Cellphone = detailer.Cellphone;
-            dbDetailer.Services = detailer.Services;
-            dbDetailer.Location = detailer.Location;
+            dbDetailer.Location = LocationConverter.GeocodeAddress(dbDetailer.Address);
 
             db.Entry(dbDetailer).State = EntityState.Modified;
 
@@ -126,12 +166,27 @@ namespace WashMyCar.API.Controllers
                 detailer.Rating,
                 detailer.Address,
                 detailer.EmailAddress,
-                detailer.DetailerAvailabilities,
+                Availability = detailer.DetailerAvailabilities.Select(da => new
+                {
+                    DayOfWeek = da.DayOfWeek.Weekday,
+                    da.Start,
+                    da.DayOfWeekId,
+                    da.DetailerId,
+                    da.End
+                }),
                 detailer.Cellphone,
                 detailer.FirstName,
                 detailer.LastName,
-                detailer.Services,
-                detailer.Location
+                Services = detailer.Services.Select(s => new
+                {
+                    s.Cost,
+                    s.ServiceType
+                }),
+                Location = new
+                {
+                    detailer.Location.Latitude,
+                    detailer.Location.Longitude
+                }
             });
             
         }

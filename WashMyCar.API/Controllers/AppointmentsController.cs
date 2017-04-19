@@ -26,7 +26,12 @@ namespace WashMyCar.API.Controllers
 				appointment.AppointmentDate,
 				appointment.CustomerId,
 				appointment.DetailerId,
-				appointment.VehicleTypeId
+				appointment.VehicleTypeId,
+                appointment.VehicleType.VehicleSize,
+                appointment.Customer.FirstName,
+                appointment.Customer.LastName,
+                appointment.Customer.Address,
+                appointment.Customer.Location
 			}); 
             return Ok(resultSet);
         }
@@ -47,8 +52,13 @@ namespace WashMyCar.API.Controllers
 				appointment.AppointmentDate,
 				appointment.CustomerId,
 				appointment.DetailerId,
-				appointment.VehicleTypeId
-			});
+				appointment.VehicleTypeId,
+                appointment.Customer.FirstName,
+                appointment.Customer.LastName,
+                appointment.Customer.Address,
+                appointment.Customer.Location,
+                appointment.VehicleType.VehicleSize
+            });
         }
 
         // PUT: api/Appointments/5
@@ -66,11 +76,16 @@ namespace WashMyCar.API.Controllers
             }
 
 			var dbAppointment = db.Appointments.Find(Id);
-				dbAppointment.AppointmentId = appointment.AppointmentId;
-				dbAppointment.AppointmentDate = appointment.AppointmentDate;
-				dbAppointment.CustomerId = appointment.CustomerId;
-				dbAppointment.DetailerId = appointment.DetailerId;
-				dbAppointment.VehicleTypeId = appointment.VehicleTypeId;
+			dbAppointment.AppointmentId = appointment.AppointmentId;
+			dbAppointment.AppointmentDate = appointment.AppointmentDate;
+			dbAppointment.CustomerId = appointment.CustomerId;
+			dbAppointment.DetailerId = appointment.DetailerId;
+			dbAppointment.VehicleTypeId = appointment.VehicleTypeId;
+            dbAppointment.VehicleType.VehicleSize = appointment.VehicleType.VehicleSize;
+            dbAppointment.Customer.FirstName = appointment.Customer.FirstName;
+            dbAppointment.Customer.LastName = appointment.Customer.LastName;
+            dbAppointment.Customer.Address = appointment.Customer.Address;
+            dbAppointment.Customer.Location = appointment.Customer.Location;
 
             db.Entry(dbAppointment).State = EntityState.Modified;
 
@@ -112,9 +127,14 @@ namespace WashMyCar.API.Controllers
 				appointment.AppointmentDate,
 				appointment.CustomerId,
 				appointment.DetailerId,
-				appointment.VehicleTypeId
+				appointment.VehicleTypeId,
+                appointment.Customer.FirstName,
+                appointment.Customer.LastName,
+                appointment.Customer.Address,
+                appointment.Customer.Location,
+                appointment.VehicleType.VehicleSize
 
-			});
+            });
         }
 
         // DELETE: api/Appointments/5

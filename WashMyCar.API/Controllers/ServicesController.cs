@@ -23,7 +23,6 @@ namespace WashMyCar.API.Controllers
             var resultSet = db.Services.Select(service => new
             {
                 service.ServiceId,
-                service.DetailerId,
                 service.ServiceType,
                 service.Cost
             });
@@ -44,7 +43,6 @@ namespace WashMyCar.API.Controllers
             return Ok(new
             {
                 service.ServiceId,
-                service.DetailerId,
                 service.ServiceType,
                 service.Cost
             });
@@ -66,7 +64,6 @@ namespace WashMyCar.API.Controllers
 
             var dbService = db.Services.Find(id);
             dbService.ServiceId = service.ServiceId;
-            dbService.DetailerId = service.DetailerId;
             dbService.ServiceType = service.ServiceType;
             dbService.Cost = service.Cost;
 
@@ -106,7 +103,6 @@ namespace WashMyCar.API.Controllers
             return CreatedAtRoute("DefaultApi", new { id = service.ServiceId }, new
             {
                 service.ServiceId,
-                service.DetailerId,
                 service.ServiceType,
                 service.Cost
             });

@@ -140,6 +140,7 @@
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\DayOfWeeksController.cs" />
     <Compile Include="Controllers\DetailersController.cs" />
+    <Compile Include="Controllers\DetailerServicesController.cs" />
     <Compile Include="Controllers\ServicesController.cs" />
     <Compile Include="Controllers\DetailerAvailabilitiesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -153,6 +154,34 @@
     <Compile Include="Migrations\201704191951449_FixedDetailersCtrl.Designer.cs">
       <DependentUpon>201704191951449_FixedDetailersCtrl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704192310286_MappedDetailerData.cs" />
+    <Compile Include="Migrations\201704192310286_MappedDetailerData.Designer.cs">
+      <DependentUpon>201704192310286_MappedDetailerData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704192312344_MappedData.cs" />
+    <Compile Include="Migrations\201704192312344_MappedData.Designer.cs">
+      <DependentUpon>201704192312344_MappedData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704192318512_FixedKeys.cs" />
+    <Compile Include="Migrations\201704192318512_FixedKeys.Designer.cs">
+      <DependentUpon>201704192318512_FixedKeys.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704192325175_FixedKey.cs" />
+    <Compile Include="Migrations\201704192325175_FixedKey.Designer.cs">
+      <DependentUpon>201704192325175_FixedKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704192331517_FixedKeyed.cs" />
+    <Compile Include="Migrations\201704192331517_FixedKeyed.Designer.cs">
+      <DependentUpon>201704192331517_FixedKeyed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704192334169_Fixed.cs" />
+    <Compile Include="Migrations\201704192334169_Fixed.Designer.cs">
+      <DependentUpon>201704192334169_Fixed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704192336586_hopethisworks.cs" />
+    <Compile Include="Migrations\201704192336586_hopethisworks.Designer.cs">
+      <DependentUpon>201704192336586_hopethisworks.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Appointment.cs" />
     <Compile Include="Models\AppointmentService.cs" />
@@ -160,6 +189,7 @@
     <Compile Include="Models\DayOfWeek.cs" />
     <Compile Include="Models\Detailer.cs" />
     <Compile Include="Models\DetailerAvailability.cs" />
+    <Compile Include="Models\DetailerService.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Models\Service.cs" />
     <Compile Include="Models\User.cs" />
@@ -188,6 +218,27 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704191951449_FixedDetailersCtrl.resx">
       <DependentUpon>201704191951449_FixedDetailersCtrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704192310286_MappedDetailerData.resx">
+      <DependentUpon>201704192310286_MappedDetailerData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704192312344_MappedData.resx">
+      <DependentUpon>201704192312344_MappedData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704192318512_FixedKeys.resx">
+      <DependentUpon>201704192318512_FixedKeys.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704192325175_FixedKey.resx">
+      <DependentUpon>201704192325175_FixedKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704192331517_FixedKeyed.resx">
+      <DependentUpon>201704192331517_FixedKeyed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704192334169_Fixed.resx">
+      <DependentUpon>201704192334169_Fixed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704192336586_hopethisworks.resx">
+      <DependentUpon>201704192336586_hopethisworks.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

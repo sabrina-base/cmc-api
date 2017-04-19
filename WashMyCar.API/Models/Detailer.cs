@@ -11,8 +11,8 @@ namespace WashMyCar.API.Models
         public Detailer()
         {
             DetailerAvailabilities = new Collection<DetailerAvailability>();
-            Services = new Collection<Service>();
             Appointments = new Collection<Appointment>();
+            DetailerServices = new Collection<DetailerService>();
         }
 
         //Scalar Properties
@@ -29,7 +29,7 @@ namespace WashMyCar.API.Models
         public virtual ICollection<DetailerAvailability> DetailerAvailabilities { get; set; }
         public virtual ICollection<Service> Services { get; set; }
         public virtual ICollection<Appointment> Appointments { get; set; }
-
+        public virtual ICollection<DetailerService> DetailerServices { get; set; }
         public virtual User User { get; set; }
     }
 }
