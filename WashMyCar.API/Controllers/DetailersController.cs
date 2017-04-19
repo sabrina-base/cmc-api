@@ -23,7 +23,15 @@ namespace WashMyCar.API.Controllers
             var resultSet = db.Detailers.Select(detailer => new
             {
                 detailer.DetailerId,
-                detailer.Rating
+                detailer.Rating,
+                detailer.Address,
+                detailer.EmailAddress,
+                detailer.DetailerAvailabilities,
+                detailer.Cellphone,
+                detailer.FirstName,
+                detailer.LastName,
+                detailer.Services,
+                detailer.Location
             });
 
             return Ok(resultSet);
@@ -42,7 +50,15 @@ namespace WashMyCar.API.Controllers
             return Ok(new
             {
                 detailer.DetailerId,
-                detailer.Rating
+                detailer.Rating,
+                detailer.Address,
+                detailer.EmailAddress,
+                detailer.DetailerAvailabilities,
+                detailer.Cellphone,
+                detailer.FirstName,
+                detailer.LastName,
+                detailer.Services,
+                detailer.Location
             });
         }
 
@@ -62,6 +78,14 @@ namespace WashMyCar.API.Controllers
 
             var dbDetailer = db.Detailers.Find(id);
             dbDetailer.DetailerId = detailer.DetailerId;
+            dbDetailer.FirstName = detailer.FirstName;
+            dbDetailer.LastName = detailer.LastName;
+            dbDetailer.Address = detailer.Address;
+            dbDetailer.EmailAddress = detailer.EmailAddress;
+            dbDetailer.DetailerAvailabilities = detailer.DetailerAvailabilities;
+            dbDetailer.Cellphone = detailer.Cellphone;
+            dbDetailer.Services = detailer.Services;
+            dbDetailer.Location = detailer.Location;
 
             db.Entry(dbDetailer).State = EntityState.Modified;
 
@@ -99,7 +123,15 @@ namespace WashMyCar.API.Controllers
             return CreatedAtRoute("DefaultApi", new { id = detailer.DetailerId }, new
             {
                 detailer.DetailerId,
-                detailer.Rating
+                detailer.Rating,
+                detailer.Address,
+                detailer.EmailAddress,
+                detailer.DetailerAvailabilities,
+                detailer.Cellphone,
+                detailer.FirstName,
+                detailer.LastName,
+                detailer.Services,
+                detailer.Location
             });
             
         }
