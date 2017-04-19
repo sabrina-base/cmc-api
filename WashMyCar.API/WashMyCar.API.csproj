@@ -145,9 +145,9 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\VehicleTypesController.cs" />
     <Compile Include="Data\WashMyCarDataContext.cs" />
-    <Compile Include="Migrations\201704182145437_InitialMigration.cs" />
-    <Compile Include="Migrations\201704182145437_InitialMigration.Designer.cs">
-      <DependentUpon>201704182145437_InitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201704191933418_UpdateFields.cs" />
+    <Compile Include="Migrations\201704191933418_UpdateFields.Designer.cs">
+      <DependentUpon>201704191933418_UpdateFields.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Appointment.cs" />
@@ -179,8 +179,8 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704182145437_InitialMigration.resx">
-      <DependentUpon>201704182145437_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704191933418_UpdateFields.resx">
+      <DependentUpon>201704191933418_UpdateFields.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

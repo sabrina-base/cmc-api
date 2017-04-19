@@ -85,7 +85,7 @@ namespace WashMyCar.API.Migrations
                     string email = Faker.InternetFaker.Email();
                     string phone = Faker.PhoneFaker.Phone();
 
-                    userManager.Create(new User
+                    var user = new User
                     {
                         Email = email,
                         PhoneNumber = phone,
@@ -99,8 +99,10 @@ namespace WashMyCar.API.Migrations
                             Address = addresses[i],
                             Location = LocationConverter.GeocodeAddress(addresses[i])
                         }
+                    };
 
-                    }, "password123");
+                    userManager.Create(user, "password123");
+                    userManager.AddToRole(user.Id, "Customer");
                 }
             }
             if (context.Detailers.Count() == 0)
@@ -143,14 +145,15 @@ namespace WashMyCar.API.Migrations
                             ServiceType = servicetype[j]
                         });   
                     }
-
-                    userManager.Create(new User
+                    var user = new User
                     {
                         Email = email,
                         PhoneNumber = phone,
                         UserName = $"detailer{i + 1}",
                         Detailer = detailer
-                    }, "password123");
+                    };
+                    userManager.Create(user, "password123");
+                    userManager.AddToRole(user.Id, "Detailer");
                 }
             }
             if (context.Appointments.Count() == 0)
