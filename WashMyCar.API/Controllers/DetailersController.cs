@@ -30,7 +30,7 @@ namespace WashMyCar.API.Controllers
         }
 
         // GET: api/Detailers/5
-        [Authorize, ResponseType(typeof(Detailer))]
+        [ResponseType(typeof(Detailer))]
         public IHttpActionResult GetDetailer(int id)
         {
             Detailer detailer = db.Detailers.Find(id);
