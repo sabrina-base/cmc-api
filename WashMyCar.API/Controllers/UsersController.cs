@@ -32,7 +32,7 @@ namespace WashMyCar.API.Controllers
 
             var user = new User
             {
-                UserName = registration.EmailAddress
+                UserName = registration.Username
             };
 
             var customer = new Customer
@@ -71,7 +71,7 @@ namespace WashMyCar.API.Controllers
 
             var user = new User
             {
-                UserName = registration.EmailAddress
+                UserName = registration.Username
             };
 
             var detailer = new Detailer
