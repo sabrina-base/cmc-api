@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Web;
 
 namespace WashMyCar.API.Models
 {
@@ -13,11 +10,11 @@ namespace WashMyCar.API.Models
             DetailersAvailability = new Collection<DetailerAvailability>();
         }
 
-        //scalar properties
+        // Scalar properties
         public int DayOfWeekId { get; set; }
         public string Weekday { get; set; }
 
-        //navigation properties
+        // Navigation properties
         public virtual ICollection<DetailerAvailability> DetailersAvailability { get; set; }
     }
 }

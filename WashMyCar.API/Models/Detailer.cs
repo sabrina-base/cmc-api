@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Web;
 
 namespace WashMyCar.API.Models
 {
@@ -10,12 +9,12 @@ namespace WashMyCar.API.Models
     {
         public Detailer()
         {
-            DetailerAvailabilities = new Collection<DetailerAvailability>();
-            Services = new Collection<Service>();
-            Appointments = new Collection<Appointment>();
+            this.DetailerAvailabilities = new Collection<DetailerAvailability>();
+            this.DetailerServices = new Collection<DetailerService>();
+            this.Appointments = new Collection<Appointment>();
         }
 
-        //Scalar Properties
+        // Scalar Properties
         public int DetailerId { get; set; }
         public double Rating
         {
@@ -25,9 +24,9 @@ namespace WashMyCar.API.Models
             }
         }
 
-        //Navigation Properties
+        // Navigation Properties
         public virtual ICollection<DetailerAvailability> DetailerAvailabilities { get; set; }
-        public virtual ICollection<Service> Services { get; set; }
+        public virtual ICollection<DetailerService> DetailerServices { get; set; }
         public virtual ICollection<Appointment> Appointments { get; set; }
 
         public virtual User User { get; set; }

@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace WashMyCar.API.Models
+﻿namespace WashMyCar.API.Models
 {
     public class AppointmentService
     {
-        // scalar properties
+        // Scalar properties
         public int AppointmentId { get; set; }
         public int ServiceId { get; set; }
 
-        // navigation properties
+        // Navigation properties
         public virtual Appointment Appointment { get; set; }
         public virtual Service Service { get; set; }
     }

@@ -140,6 +140,7 @@
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\DayOfWeeksController.cs" />
     <Compile Include="Controllers\DetailersController.cs" />
+    <Compile Include="Controllers\ResultsController.cs" />
     <Compile Include="Controllers\ServicesController.cs" />
     <Compile Include="Controllers\DetailerAvailabilitiesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="Models\DayOfWeek.cs" />
     <Compile Include="Models\Detailer.cs" />
     <Compile Include="Models\DetailerAvailability.cs" />
+    <Compile Include="Models\DetailerService.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Models\Service.cs" />
     <Compile Include="Models\User.cs" />

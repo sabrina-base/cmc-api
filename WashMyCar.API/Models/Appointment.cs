@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Web;
 
 namespace WashMyCar.API.Models
 {
@@ -13,7 +12,7 @@ namespace WashMyCar.API.Models
             this.AppointmentServices = new Collection<AppointmentService>();
         }
 
-        //scalar properties
+        // Scalar properties
         public int AppointmentId { get; set; }
         public int VehicleTypeId { get; set; }
         public DateTime AppointmentDate { get; set; }
@@ -22,8 +21,10 @@ namespace WashMyCar.API.Models
         public DateTime? ConfirmedDate { get; set; }
         public DateTime? CancelledDate { get; set; }
         public int? Rating { get; set; }
+        public string RatingText { get; set; }
+        public string Specifications { get; set; }
 
-        // computed properties
+        // Computed properties
         public decimal TotalCost
         {
             get

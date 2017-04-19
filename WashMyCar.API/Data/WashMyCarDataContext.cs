@@ -26,25 +26,32 @@ namespace WashMyCar.API.Data
         public IDbSet<Service> Services { get; set; }
         public IDbSet<VehicleType> VehicleTypes { get; set; }
         public IDbSet<AppointmentService> AppointmentServices { get; set; }
+        public IDbSet<DetailerService> DetailerServices { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             // customer has many sales
             modelBuilder.Entity<Appointment>()
-              .HasMany(appointment => appointment.AppointmentServices)
-              .WithRequired(service => service.Appointment)
-              .HasForeignKey(service => service.AppointmentId)
-              .WillCascadeOnDelete(false);
+                .HasMany(appointment => appointment.AppointmentServices)
+                .WithRequired(service => service.Appointment)
+                .HasForeignKey(service => service.AppointmentId)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Customer>()
                 .HasMany(customer => customer.Appointments)
                 .WithRequired(appointment => appointment.Customer)
                 .HasForeignKey(appointment => appointment.CustomerId);
 
-            modelBuilder.Entity<Models.DayOfWeek>()
+            modelBuilder.Entity<DayOfWeek>()
                 .HasMany(dayOfWeek => dayOfWeek.DetailersAvailability)
                 .WithRequired(detailersAvailability => detailersAvailability.DayOfWeek)
                 .HasForeignKey(detailersAvailability => detailersAvailability.DayOfWeekId);
+
+            modelBuilder.Entity<Detailer>()
+                .HasMany(detailer => detailer.DetailerServices)
+                .WithRequired(service => service.Detailer)
+                .HasForeignKey(service => service.DetailerId)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Detailer>()
                 .HasMany(detailer => detailer.DetailerAvailabilities)
@@ -52,14 +59,9 @@ namespace WashMyCar.API.Data
                 .HasForeignKey(detailersAvailability => detailersAvailability.DetailerId);
 
             modelBuilder.Entity<Detailer>()
-                .HasMany(detailer => detailer.Services)
-                .WithOptional(service => service.Detailer)
-                .HasForeignKey(service => service.DetailerId);
-
-            modelBuilder.Entity<Detailer>()
                 .HasMany(detailer => detailer.Appointments)
                 .WithRequired(appointment => appointment.Detailer)
-                .HasForeignKey(appointment=> appointment.DetailerId);
+                .HasForeignKey(appointment => appointment.DetailerId);
 
             modelBuilder.Entity<VehicleType>()
                 .HasMany(vehicleType => vehicleType.Appointments)
@@ -68,9 +70,9 @@ namespace WashMyCar.API.Data
 
             // 1-to-1: User -> Detailer
             modelBuilder.Entity<User>()
-               .HasOptional(user => user.Detailer)
-               .WithOptionalDependent(detailer => detailer.User)
-               .Map(m => m.MapKey("DetailerId"));
+                .HasOptional(user => user.Detailer)
+                .WithOptionalDependent(detailer => detailer.User)
+                .Map(m => m.MapKey("DetailerId"));
 
             // 1-to-1: User -> Customer
             modelBuilder.Entity<User>()
@@ -78,12 +80,15 @@ namespace WashMyCar.API.Data
                 .WithOptionalDependent(customer => customer.User)
                 .Map(m => m.MapKey("CustomerId"));
 
-        // Configure the compound keys
-        modelBuilder.Entity<AppointmentService>()
-                        .HasKey(a => new { a.AppointmentId, a.ServiceId });
+            // Configure the compound keys
+            modelBuilder.Entity<AppointmentService>()
+                .HasKey(a => new { a.AppointmentId, a.ServiceId });
+
+            modelBuilder.Entity<DetailerService>()
+                .HasKey(a => new { a.DetailerId, a.ServiceId });
 
             modelBuilder.Entity<DetailerAvailability>()
-                        .HasKey(a => new { a.DetailerId, a.DayOfWeekId });
+                .HasKey(a => new { a.DetailerId, a.DayOfWeekId });
 
             base.OnModelCreating(modelBuilder);
         }

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.Spatial;
-using System.Linq;
-using System.Web;
+﻿using System.Data.Entity.Spatial;
 
 namespace WashMyCar.API.Models
 {
     public class Person
     {
-        //scalar properties
+        // Scalar properties
         public int PersonId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

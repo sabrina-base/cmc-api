@@ -1,33 +1,27 @@
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity.Migrations;
+using System.Linq;
+using WashMyCar.API.Data;
+using WashMyCar.API.Models;
+using WashMyCar.API.Utility;
+
 namespace WashMyCar.API.Migrations
 {
-    using Microsoft.Owin;
-    using Microsoft.Owin.Security.OAuth;
-    using System.Web.Http.Owin;
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Linq;
-    using Owin;
-    using WashMyCar.Api.Providers;
-    using Microsoft.AspNet.Identity.EntityFramework;
-    using WashMyCar.API.Models;
-    using Microsoft.AspNet.Identity;
-    using System.Data.Entity.Spatial;
-    using WashMyCar.API.Utility;
-
-    internal sealed class Configuration : DbMigrationsConfiguration<WashMyCar.API.Data.WashMyCarDataContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<WashMyCarDataContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        
-
-        protected override void Seed(WashMyCar.API.Data.WashMyCarDataContext context)
+        protected override void Seed(WashMyCarDataContext context)
         {
             var userStore = new UserStore<User>(context);
             var userManager = new UserManager<User>(userStore);
+            Random random = new Random();
 
             string[] addresses = new string[]
             {
@@ -52,10 +46,10 @@ namespace WashMyCar.API.Migrations
 
                 context.SaveChanges();
             }
-            if (context.DayOfWeeks.Count()==0)
+            if (context.DayOfWeeks.Count() == 0)
             {
-                string[] weekday = new string[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday","Friday", "Saturday" };
-                for(int i= 0; i<weekday.Length; i++)
+                string[] weekday = new string[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+                for (int i = 0; i < weekday.Length; i++)
                 {
                     context.DayOfWeeks.Add(new Models.DayOfWeek
                     {
@@ -64,11 +58,33 @@ namespace WashMyCar.API.Migrations
                 }
                 context.SaveChanges();
             }
+            if (context.Services.Count() == 0)
+            {
+                Dictionary<string, decimal> services = new Dictionary<string, decimal>() {
+                    { "Handwash", 39.99M},
+                    { "Handwax", 69.99M},
+                    { "Complete Interior", 129.99M},
+                    { "Complete Exterior", 179.99M},
+                    { "Steam Clean Interior", 119.99M},
+                    { "Leather Treatment", 59.99M},
+                    { "Deluxe Detail", 239.99M},
+                    { "Light and Rim Restoration", 49.99M}
+                };
+
+                foreach (KeyValuePair<string, decimal> service in services)
+                {
+                    context.Services.Add(new Service
+                    {
+                        ServiceType = service.Key,
+                        Cost = service.Value
+                    });
+                }
+            }
             if (context.VehicleTypes.Count() == 0)
             {
                 string[] vehicletype = new string[] { "Coupe", "Sedan", "SUV" };
-                decimal[] multiplier = new decimal[] { 1, 1.2M, 1.3M  };
-                for (int i =0; i<vehicletype.Length; i++)
+                decimal[] multiplier = new decimal[] { 1, 1.2M, 1.3M };
+                for (int i = 0; i < vehicletype.Length; i++)
                 {
                     context.VehicleTypes.Add(new Models.VehicleType
                     {
@@ -131,17 +147,20 @@ namespace WashMyCar.API.Migrations
                         });
                     }
 
-                    // services
-                    string[] servicetype = new string[] { "Handwash", "Handwax", "Complete Interior", "Complete Exterior", "Steam Clean Interior", "Leather Treatment", "Deluxe Detail", "Light and Rim Restoration" };
-                    decimal[] cost = new decimal[] { 39.99M, 69.99M, 129.99M, 179.99M, 119.99M, 59.99M, 239.99M, 49.99M };
-
-                    for(int j = 0; j < Faker.NumberFaker.Number(1,servicetype.Length); j++)
+                    // service(s)
+                    var services = context.Services.ToList();
+                    for (int j = 0; j < Faker.NumberFaker.Number(1, services.Count()); j++)
                     {
-                        detailer.Services.Add(new Service
+                        // grab a random service from db
+                        var service = services[random.Next(services.Count())];
+                        if (detailer.DetailerServices.All(x => x.ServiceId != service.ServiceId))
                         {
-                            Cost = cost[j],
-                            ServiceType = servicetype[j]
-                        });   
+                            detailer.DetailerServices.Add(new DetailerService
+                            {
+                                Service = service,
+                                Multiplier = (decimal)random.NextDouble()
+                            });
+                        }
                     }
 
                     userManager.Create(new User
@@ -171,15 +190,15 @@ namespace WashMyCar.API.Migrations
                             CustomerId = Faker.NumberFaker.Number(1, context.Customers.Count()),
                             Detailer = detailer,
                             VehicleTypeId = Faker.NumberFaker.Number(1, context.VehicleTypes.Count()),
-                            Rating = Faker.BooleanFaker.Boolean() ? (int?)Faker.NumberFaker.Number(1,5) : null
+                            Rating = Faker.BooleanFaker.Boolean() ? (int?)Faker.NumberFaker.Number(1, 5) : null
                         };
 
                         // services
-                        for(int j = 0; j < Faker.NumberFaker.Number(1, detailer.Services.Count); j++)
+                        for (int j = 0; j < Faker.NumberFaker.Number(1, detailer.DetailerServices.Count); j++)
                         {
                             appt.AppointmentServices.Add(new AppointmentService
                             {
-                                Service = detailer.Services.ToArray()[j]
+                                Service = detailer.DetailerServices.ElementAt(j).Service
                             });
                         }
 

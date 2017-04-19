@@ -10,12 +10,12 @@ namespace WashMyCar.API.Models
             Appointments = new Collection<Appointment>();
         }
 
-        //scalar properties
+        // Scalar properties
         public int VehicleTypeId { get; set; }
         public string VehicleSize { get; set; }
         public decimal Multiplier { get; set; }
 
-        //navigation properties
+        // Navigation properties
         public virtual ICollection<Appointment> Appointments { get; set; }
     }
 }

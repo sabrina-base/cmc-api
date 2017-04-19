@@ -15,7 +15,7 @@ namespace WashMyCar.API.Controllers
 {
     public class ServicesController : ApiController
     {
-        private Data.WashMyCarDataContext db = new Data.WashMyCarDataContext();
+        private WashMyCarDataContext db = new WashMyCarDataContext();
 
         // GET: api/Services
         public IHttpActionResult GetServices()
@@ -23,9 +23,7 @@ namespace WashMyCar.API.Controllers
             var resultSet = db.Services.Select(service => new
             {
                 service.ServiceId,
-                service.DetailerId,
-                service.ServiceType,
-                service.Cost
+                service.ServiceType
             });
             return Ok(resultSet);
             
@@ -44,9 +42,7 @@ namespace WashMyCar.API.Controllers
             return Ok(new
             {
                 service.ServiceId,
-                service.DetailerId,
-                service.ServiceType,
-                service.Cost
+                service.ServiceType
             });
         }
 
@@ -66,9 +62,7 @@ namespace WashMyCar.API.Controllers
 
             var dbService = db.Services.Find(id);
             dbService.ServiceId = service.ServiceId;
-            dbService.DetailerId = service.DetailerId;
             dbService.ServiceType = service.ServiceType;
-            dbService.Cost = service.Cost;
 
             db.Entry(service).State = EntityState.Modified;
 
@@ -106,9 +100,7 @@ namespace WashMyCar.API.Controllers
             return CreatedAtRoute("DefaultApi", new { id = service.ServiceId }, new
             {
                 service.ServiceId,
-                service.DetailerId,
-                service.ServiceType,
-                service.Cost
+                service.ServiceType
             });
         }
 

@@ -1,19 +1,17 @@
 ﻿namespace WashMyCar.API.Models
 {
-    public class DetailerAvailability
+    public class DetailerService
     {
         // Scalar properties
         #region Compound Key
         public int DetailerId { get; set; }
-        public int DayOfWeekId { get; set; }
+        public int ServiceId { get; set; }
         #endregion
 
-        public float? Start { get; set; }
-        public float? End { get; set; }
         public decimal Multiplier { get; set; }
 
         // Navigation properties
         public virtual Detailer Detailer { get; set; }
-        public virtual DayOfWeek  DayOfWeek { get; set; }
+        public virtual Service Service { get; set; }
     }
 }
