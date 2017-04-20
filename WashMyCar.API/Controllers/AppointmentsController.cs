@@ -16,34 +16,37 @@ namespace WashMyCar.API.Controllers
 {
     public class AppointmentsController : BaseApiController
     {
-        // GET: api/Detailer/Schedule
-        [Route("api/detailer/schedule")]
+        // GET: api/Appointments
         public IHttpActionResult GetDetailerSchedule()
 		{
-            if(CurrentUser == null)
+            var resultSet = db.Appointments.ToArray().Select(appointment => new
             {
-                return Unauthorized();
-            }
-
-			var resultSet = 
-                db
-                    .Appointments
-                    .Where(a => a.Detailer.User.Id == CurrentUser.Id)
-                    .Select(appointment => new
-			        {
-				        appointment.AppointmentId,
-				        appointment.AppointmentDate,
-				        appointment.CustomerId,
-				        appointment.DetailerId,
-				        appointment.VehicleTypeId,
-                        appointment.VehicleType.VehicleSize,
-                        appointment.Customer.FirstName,
-                        appointment.Customer.LastName,
-                        appointment.Customer.Address,
-                        appointment.Customer.Location,
-                    }); 
-
-            //
+                appointment.AppointmentId,
+                appointment.AppointmentDate,
+                appointment.CustomerId,
+                appointment.DetailerId,
+                appointment.VehicleTypeId,
+                appointment.VehicleType.VehicleSize,
+                appointment.Customer.FirstName,
+                appointment.Customer.LastName,
+                appointment.Customer.Address,
+                appointment.Customer.Location,
+                appointment.CancelledDate,
+                appointment.ConfirmedDate,
+                appointment.DenyDate,
+                Locate = new
+                {
+                    appointment.Customer.Location.Latitude,
+                    appointment.Customer.Location.Longitude
+                },
+                ServicesWithAppointment = appointment.AppointmentServices.Select(swa => new
+                {
+                    Services = swa.Service.ServiceType,
+                    swa.ServiceId,
+                    swa.Service.Cost
+                })
+            });
+             
             return Ok(resultSet);
         }
 
@@ -71,7 +74,11 @@ namespace WashMyCar.API.Controllers
                         appointment.Customer.FirstName,
                         appointment.Customer.LastName,
                         appointment.Customer.Address,
-                        appointment.Customer.Location
+                        Locate = new
+                        {
+                            appointment.Customer.Location.Latitude,
+                            appointment.Customer.Location.Longitude
+                        },
                     });
             return Ok(resultSet);
         }
@@ -96,7 +103,11 @@ namespace WashMyCar.API.Controllers
                 appointment.Customer.FirstName,
                 appointment.Customer.LastName,
                 appointment.Customer.Address,
-                appointment.Customer.Location,
+                Locate = new
+                {
+                    appointment.Customer.Location.Latitude,
+                    appointment.Customer.Location.Longitude
+                },
                 appointment.VehicleType.VehicleSize,
                 ServicesWithAppointment = appointment.AppointmentServices.Select(swa => new
                 {
@@ -139,8 +150,7 @@ namespace WashMyCar.API.Controllers
             dbAppointment.Customer.FirstName = appointment.Customer.FirstName;
             dbAppointment.Customer.LastName = appointment.Customer.LastName;
             dbAppointment.Customer.Address = appointment.Customer.Address;
-            dbAppointment.Customer.Location = appointment.Customer.Location;
-
+           
             db.Entry(dbAppointment).State = EntityState.Modified;
 
             try
@@ -187,7 +197,11 @@ namespace WashMyCar.API.Controllers
                 appointment.Customer.FirstName,
                 appointment.Customer.LastName,
                 appointment.Customer.Address,
-                appointment.Customer.Location,
+                Locate = new
+                {
+                    appointment.Customer.Location.Latitude,
+                    appointment.Customer.Location.Longitude
+                },
                 appointment.VehicleType.VehicleSize
 
             });
