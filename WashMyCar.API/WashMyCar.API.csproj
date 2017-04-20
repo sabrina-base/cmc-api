@@ -146,13 +146,9 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\VehicleTypesController.cs" />
     <Compile Include="Data\WashMyCarDataContext.cs" />
-    <Compile Include="Migrations\201704201710478_InitialMigration.cs" />
-    <Compile Include="Migrations\201704201710478_InitialMigration.Designer.cs">
-      <DependentUpon>201704201710478_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704202218494_MappedMoreInfo.cs" />
-    <Compile Include="Migrations\201704202218494_MappedMoreInfo.Designer.cs">
-      <DependentUpon>201704202218494_MappedMoreInfo.cs</DependentUpon>
+    <Compile Include="Migrations\201704202350538_InitialCommit.cs" />
+    <Compile Include="Migrations\201704202350538_InitialCommit.Designer.cs">
+      <DependentUpon>201704202350538_InitialCommit.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Appointment.cs" />
@@ -186,11 +182,8 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704201710478_InitialMigration.resx">
-      <DependentUpon>201704201710478_InitialMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704202218494_MappedMoreInfo.resx">
-      <DependentUpon>201704202218494_MappedMoreInfo.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704202350538_InitialCommit.resx">
+      <DependentUpon>201704202350538_InitialCommit.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
