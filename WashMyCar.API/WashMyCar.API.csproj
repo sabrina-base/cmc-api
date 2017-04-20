@@ -140,18 +140,15 @@
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\DayOfWeeksController.cs" />
     <Compile Include="Controllers\DetailersController.cs" />
+    <Compile Include="Controllers\DetailerServicesController.cs" />
     <Compile Include="Controllers\ServicesController.cs" />
     <Compile Include="Controllers\DetailerAvailabilitiesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\VehicleTypesController.cs" />
     <Compile Include="Data\WashMyCarDataContext.cs" />
-    <Compile Include="Migrations\201704191933418_UpdateFields.cs" />
-    <Compile Include="Migrations\201704191933418_UpdateFields.Designer.cs">
-      <DependentUpon>201704191933418_UpdateFields.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704191951449_FixedDetailersCtrl.cs" />
-    <Compile Include="Migrations\201704191951449_FixedDetailersCtrl.Designer.cs">
-      <DependentUpon>201704191951449_FixedDetailersCtrl.cs</DependentUpon>
+    <Compile Include="Migrations\201704201710478_InitialMigration.cs" />
+    <Compile Include="Migrations\201704201710478_InitialMigration.Designer.cs">
+      <DependentUpon>201704201710478_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Appointment.cs" />
@@ -160,6 +157,7 @@
     <Compile Include="Models\DayOfWeek.cs" />
     <Compile Include="Models\Detailer.cs" />
     <Compile Include="Models\DetailerAvailability.cs" />
+    <Compile Include="Models\DetailerService.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Models\Service.cs" />
     <Compile Include="Models\User.cs" />
@@ -183,11 +181,8 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704191933418_UpdateFields.resx">
-      <DependentUpon>201704191933418_UpdateFields.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704191951449_FixedDetailersCtrl.resx">
-      <DependentUpon>201704191951449_FixedDetailersCtrl.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704201710478_InitialMigration.resx">
+      <DependentUpon>201704201710478_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -30,7 +30,11 @@ namespace WashMyCar.API.Controllers
                 customer.Address,
                 customer.EmailAddress,
                 customer.Cellphone,
-                customer.Location
+                Location = new
+                {
+                    customer.Location.Latitude,
+                    customer.Location.Longitude
+                }
             });
             return Ok(resultSet);
         }
@@ -53,7 +57,11 @@ namespace WashMyCar.API.Controllers
                 customer.Address,
                 customer.EmailAddress,
                 customer.Cellphone,
-                customer.Location
+                Location = new
+                {
+                    customer.Location.Latitude,
+                    customer.Location.Longitude
+                }
             });
         }
 

@@ -23,6 +23,7 @@ namespace WashMyCar.API.Models
         public DateTime? CancelledDate { get; set; }
         public int? Rating { get; set; }
 
+
         // computed properties
         public decimal TotalCost
         {
