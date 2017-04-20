@@ -38,10 +38,10 @@ namespace WashMyCar.API.Controllers
                     da.Start,
                     da.End
                 }),
-                Services = detailer.Services.Select(s => new
+                Services = detailer.DetailerServices.Select(ds => new
                 {
-                    s.Cost,
-                    s.ServiceType
+                    ds.Service.Cost,
+                    ds.Service.ServiceType
                 }),
                 Location = new
                 {
@@ -81,10 +81,10 @@ namespace WashMyCar.API.Controllers
                 }),
                 detailer.FirstName,
                 detailer.LastName,
-                Services = detailer.Services.Select(s => new
+                Services = detailer.DetailerServices.Select(ds => new
                 {
-                    s.Cost,
-                    s.ServiceType
+                    ds.Service.Cost,
+                    ds.Service.ServiceType
                 }),
                 Location = new
                 {
@@ -177,10 +177,10 @@ namespace WashMyCar.API.Controllers
                 detailer.Cellphone,
                 detailer.FirstName,
                 detailer.LastName,
-                Services = detailer.Services.Select(s => new
+                Services = detailer.DetailerServices.Select(ds => new
                 {
-                    s.Cost,
-                    s.ServiceType
+                    ds.Service.Cost,
+                    ds.Service.ServiceType
                 }),
                 Location = new
                 {

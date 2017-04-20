@@ -3,7 +3,7 @@ namespace WashMyCar.API.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class UpdateFields : DbMigration
+    public partial class InitialMigration : DbMigration
     {
         public override void Up()
         {
@@ -46,20 +46,29 @@ namespace WashMyCar.API.Migrations
                 c => new
                     {
                         ServiceId = c.Int(nullable: false, identity: true),
-                        DetailerId = c.Int(),
                         ServiceType = c.String(),
                         Cost = c.Decimal(nullable: false, precision: 18, scale: 2),
                     })
-                .PrimaryKey(t => t.ServiceId)
-                .ForeignKey("dbo.Detailers", t => t.DetailerId)
-                .Index(t => t.DetailerId);
+                .PrimaryKey(t => t.ServiceId);
+            
+            CreateTable(
+                "dbo.DetailerServices",
+                c => new
+                    {
+                        DetailerId = c.Int(nullable: false),
+                        ServiceId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.DetailerId, t.ServiceId })
+                .ForeignKey("dbo.Detailers", t => t.DetailerId, cascadeDelete: true)
+                .ForeignKey("dbo.Services", t => t.ServiceId, cascadeDelete: true)
+                .Index(t => t.DetailerId)
+                .Index(t => t.ServiceId);
             
             CreateTable(
                 "dbo.Detailers",
                 c => new
                     {
                         DetailerId = c.Int(nullable: false, identity: true),
-                        PersonId = c.Int(nullable: false),
                         FirstName = c.String(),
                         LastName = c.String(),
                         EmailAddress = c.String(),
@@ -138,7 +147,6 @@ namespace WashMyCar.API.Migrations
                 c => new
                     {
                         CustomerId = c.Int(nullable: false, identity: true),
-                        PersonId = c.Int(nullable: false),
                         FirstName = c.String(),
                         LastName = c.String(),
                         EmailAddress = c.String(),
@@ -200,13 +208,14 @@ namespace WashMyCar.API.Migrations
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
             DropForeignKey("dbo.Appointments", "VehicleTypeId", "dbo.VehicleTypes");
             DropForeignKey("dbo.AppointmentServices", "AppointmentId", "dbo.Appointments");
+            DropForeignKey("dbo.DetailerServices", "ServiceId", "dbo.Services");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUsers", "DetailerId", "dbo.Detailers");
             DropForeignKey("dbo.AspNetUsers", "CustomerId", "dbo.Customers");
             DropForeignKey("dbo.Appointments", "CustomerId", "dbo.Customers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
-            DropForeignKey("dbo.Services", "DetailerId", "dbo.Detailers");
+            DropForeignKey("dbo.DetailerServices", "DetailerId", "dbo.Detailers");
             DropForeignKey("dbo.DetailerAvailabilities", "DetailerId", "dbo.Detailers");
             DropForeignKey("dbo.DetailerAvailabilities", "DayOfWeekId", "dbo.DayOfWeeks");
             DropForeignKey("dbo.Appointments", "DetailerId", "dbo.Detailers");
@@ -221,7 +230,8 @@ namespace WashMyCar.API.Migrations
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.DetailerAvailabilities", new[] { "DayOfWeekId" });
             DropIndex("dbo.DetailerAvailabilities", new[] { "DetailerId" });
-            DropIndex("dbo.Services", new[] { "DetailerId" });
+            DropIndex("dbo.DetailerServices", new[] { "ServiceId" });
+            DropIndex("dbo.DetailerServices", new[] { "DetailerId" });
             DropIndex("dbo.AppointmentServices", new[] { "ServiceId" });
             DropIndex("dbo.AppointmentServices", new[] { "AppointmentId" });
             DropIndex("dbo.Appointments", new[] { "DetailerId" });
@@ -237,6 +247,7 @@ namespace WashMyCar.API.Migrations
             DropTable("dbo.DayOfWeeks");
             DropTable("dbo.DetailerAvailabilities");
             DropTable("dbo.Detailers");
+            DropTable("dbo.DetailerServices");
             DropTable("dbo.Services");
             DropTable("dbo.AppointmentServices");
             DropTable("dbo.Appointments");

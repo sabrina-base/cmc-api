@@ -75,6 +75,8 @@ namespace WashMyCar.API.Migrations
                         Cost = service.Value
                     });
                 }
+
+                context.SaveChanges();
             }
             if (context.DayOfWeeks.Count()==0)
             {
@@ -158,11 +160,10 @@ namespace WashMyCar.API.Migrations
                     }
 
                     // services
-                    var services = context.Services.ToList();
-                    for (int j = 0; j < Faker.NumberFaker.Number(1, services.Count()); j++)
+                    for (int j = 0; j < Faker.NumberFaker.Number(1, context.Services.Count()); j++)
                     {
                         // grab a random service from db
-                        var service = services[random.Next(services.Count())];
+                        var service = context.Services.Find(j + 1);
                         if (detailer.DetailerServices.All(x => x.ServiceId != service.ServiceId))
                         {
                             detailer.DetailerServices.Add(new DetailerService
