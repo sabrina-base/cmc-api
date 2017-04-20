@@ -150,6 +150,10 @@
     <Compile Include="Migrations\201704201710478_InitialMigration.Designer.cs">
       <DependentUpon>201704201710478_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704202218494_MappedMoreInfo.cs" />
+    <Compile Include="Migrations\201704202218494_MappedMoreInfo.Designer.cs">
+      <DependentUpon>201704202218494_MappedMoreInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Appointment.cs" />
     <Compile Include="Models\AppointmentService.cs" />
@@ -167,6 +171,7 @@
     <Compile Include="RegistrationModel.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utility\LocationConverter.cs" />
+    <Compile Include="Utility\BaseApiController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -183,6 +188,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201704201710478_InitialMigration.resx">
       <DependentUpon>201704201710478_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704202218494_MappedMoreInfo.resx">
+      <DependentUpon>201704202218494_MappedMoreInfo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
