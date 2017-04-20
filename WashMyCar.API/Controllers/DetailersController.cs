@@ -47,13 +47,21 @@ namespace WashMyCar.API.Controllers
                 {
                     detailer.Location.Latitude,
                     detailer.Location.Longitude
-                }
+                },
+                Appointments = detailer.Appointments.Select(da => new
+                {
+                    da.Customer.FirstName,
+                    da.Customer.LastName,
+                    da.Customer.Address,
+                    da.AppointmentDate,
+                    da.Customer.Cellphone
+                })
             });
 
             return Ok(resultSet);
         }
 
-        // GET: api/Detailers/5
+        // GET: api/Detailers/
         [ResponseType(typeof(Detailer))]
         public IHttpActionResult GetDetailer(int id)
         {
@@ -90,7 +98,16 @@ namespace WashMyCar.API.Controllers
                 {
                     detailer.Location.Latitude,
                     detailer.Location.Longitude
-                }
+                },
+                Appointments = detailer.Appointments.Select(da => new
+                {
+                    da.Customer.FirstName,
+                    da.Customer.LastName,
+                    da.Customer.Address,
+                    da.AppointmentDate,
+                    da.Customer.Cellphone
+                })
+                // add securite routes
             });
         }
 

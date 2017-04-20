@@ -10,29 +10,69 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using WashMyCar.API.Data;
 using WashMyCar.API.Models;
+using WashMyCar.API.Utility;
 
 namespace WashMyCar.API.Controllers
 {
-    public class AppointmentsController : ApiController
+    public class AppointmentsController : BaseApiController
     {
-        private Data.WashMyCarDataContext db = new Data.WashMyCarDataContext();
-
-        // GET: api/Appointments
-        public IHttpActionResult GetAppointments()
+        // GET: api/Detailer/Schedule
+        [Route("api/detailer/schedule")]
+        public IHttpActionResult GetDetailerSchedule()
 		{
-			var resultSet = db.Appointments.Select(appointment => new
-			{
-				appointment.AppointmentId,
-				appointment.AppointmentDate,
-				appointment.CustomerId,
-				appointment.DetailerId,
-				appointment.VehicleTypeId,
-                appointment.VehicleType.VehicleSize,
-                appointment.Customer.FirstName,
-                appointment.Customer.LastName,
-                appointment.Customer.Address,
-                appointment.Customer.Location
-			}); 
+            if(CurrentUser == null)
+            {
+                return Unauthorized();
+            }
+
+			var resultSet = 
+                db
+                    .Appointments
+                    .Where(a => a.Detailer.User.Id == CurrentUser.Id)
+                    .Select(appointment => new
+			        {
+				        appointment.AppointmentId,
+				        appointment.AppointmentDate,
+				        appointment.CustomerId,
+				        appointment.DetailerId,
+				        appointment.VehicleTypeId,
+                        appointment.VehicleType.VehicleSize,
+                        appointment.Customer.FirstName,
+                        appointment.Customer.LastName,
+                        appointment.Customer.Address,
+                        appointment.Customer.Location,
+                    }); 
+
+            //
+            return Ok(resultSet);
+        }
+
+        // GET: api/Customer/Schedule
+        [Route("api/customer/schedule")]
+        public IHttpActionResult GetCustomerSchedule()
+        {
+            if (CurrentUser == null)
+            {
+                return Unauthorized();
+            }
+
+            var resultSet =
+                db
+                    .Appointments
+                    .Where(a => a.Customer.User.Id == CurrentUser.Id)
+                    .Select(appointment => new
+                    {
+                        appointment.AppointmentId,
+                        appointment.AppointmentDate,
+                        appointment.CustomerId,
+                        appointment.DetailerId,
+                        appointment.VehicleTypeId,
+                        appointment.VehicleType.VehicleSize,
+                        appointment.Customer.FirstName,
+                        appointment.Customer.LastName,
+                        appointment.Customer.Address,
+                        appointment.Customer.Location
+                    });
             return Ok(resultSet);
         }
 
@@ -57,7 +97,13 @@ namespace WashMyCar.API.Controllers
                 appointment.Customer.LastName,
                 appointment.Customer.Address,
                 appointment.Customer.Location,
-                appointment.VehicleType.VehicleSize
+                appointment.VehicleType.VehicleSize,
+                ServicesWithAppointment = appointment.AppointmentServices.Select(swa => new
+                {
+                    Services = swa.Service.ServiceType,
+                    swa.ServiceId,
+                    swa.Service.Cost
+                })
             });
         }
 
@@ -65,14 +111,22 @@ namespace WashMyCar.API.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutAppointment(int Id, Appointment appointment)
         {
+            // validating data that's coming in
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            // REST API standard
             if (Id != appointment.AppointmentId)
             {
                 return BadRequest();
+            }
+
+            if(appointment.DetailerId != CurrentUser.Detailer.DetailerId &&
+               appointment.CustomerId != CurrentUser.Customer.CustomerId)
+            {
+                return Unauthorized();
             }
 
 			var dbAppointment = db.Appointments.Find(Id);
@@ -117,6 +171,8 @@ namespace WashMyCar.API.Controllers
                 return BadRequest(ModelState);
             }
 
+            appointment.CustomerId = CurrentUser.Customer.CustomerId;
+
             db.Appointments.Add(appointment);
             db.SaveChanges();
 
@@ -143,6 +199,13 @@ namespace WashMyCar.API.Controllers
         public IHttpActionResult DeleteAppointment(int id)
         {
             Appointment appointment = db.Appointments.Find(id);
+
+            if(appointment.DetailerId != CurrentUser.Detailer.DetailerId &&
+               appointment.CustomerId != CurrentUser.Customer.CustomerId)
+            {
+                return Unauthorized();
+            }
+
             if (appointment == null)
             {
                 return NotFound();
@@ -156,10 +219,6 @@ namespace WashMyCar.API.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
             base.Dispose(disposing);
         }
 
