@@ -5,6 +5,7 @@ using System.Web.Http;
 using WashMyCar.API.Data;
 using System.Data.Entity.Spatial;
 using WashMyCar.API.Utility;
+using System.Linq;
 
 namespace WashMyCar.API.Controllers
 {
@@ -31,14 +32,78 @@ namespace WashMyCar.API.Controllers
 
             return Ok(new
             {
+                CurrentUser.Customer.CustomerId,
+                CurrentUser.Customer.FirstName,
+                CurrentUser.Customer.LastName,
                 CurrentUser.Customer.Address,
+                CurrentUser.Customer.EmailAddress,
                 CurrentUser.Customer.Cellphone,
-                CurrentUser.Customer.EmailAddress
+                Location = new
+                {
+                    CurrentUser.Customer.Location.Latitude,
+                    CurrentUser.Customer.Location.Longitude
+                },
+                Appointments = CurrentUser.Customer.Appointments.Select(ca => new {
+                    ca.AppointmentDate,
+                    ca.DetailerId,
+                    ca.Detailer.FirstName,
+                    ca.Detailer.LastName,
+                    ca.TotalCost,
+                    ca.VehicleType.VehicleSize,
+                    ca.Rating,
+                    ca.VehicleTypeId
+                })
+
             });
         }
 
         // GET: api/detailerProfile
         // TODO: Copy GetCustomerProfile and modify to work for detailers
+        [Route("api/detailerProfile")]
+        public IHttpActionResult GetDetailerProfile()
+        {
+            if (CurrentUser.Customer == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new
+            {
+                CurrentUser.Detailer.DetailerId,
+                CurrentUser.Detailer.Rating,
+                CurrentUser.Detailer.Address,
+                CurrentUser.Detailer.EmailAddress,
+                CurrentUser.Detailer.Cellphone,
+                Availability = CurrentUser.Detailer.DetailerAvailabilities.Select(da => new
+                {
+                    DayOfWeek = da.DayOfWeek.Weekday,
+                    da.Start,
+                    da.DayOfWeekId,
+                    da.DetailerId,
+                    da.End
+                }),
+                CurrentUser.Detailer.FirstName,
+                CurrentUser.Detailer.LastName,
+                Services = CurrentUser.Detailer.DetailerServices.Select(ds => new
+                {
+                    ds.Service.Cost,
+                    ds.Service.ServiceType
+                }),
+                Location = new
+                {
+                    CurrentUser.Detailer.Location.Latitude,
+                    CurrentUser.Detailer.Location.Longitude
+                },
+                Appointments = CurrentUser.Detailer.Appointments.Select(da => new
+                {
+                    da.Customer.FirstName,
+                    da.Customer.LastName,
+                    da.Customer.Address,
+                    da.AppointmentDate,
+                    da.Customer.Cellphone
+                })
+            });
+        }
 
         // POST: api/users/register
         [AllowAnonymous]
@@ -52,7 +117,9 @@ namespace WashMyCar.API.Controllers
 
             var user = new User
             {
-                UserName = registration.Username
+                UserName = registration.Username,
+                Email = registration.EmailAddress,
+                PhoneNumber = registration.Cellphone
             };
 
             var customer = new Customer
@@ -71,6 +138,7 @@ namespace WashMyCar.API.Controllers
 
             if (result.Succeeded)
             {
+                _userManager.AddToRole(user.Id, "Detailer");
                 return Ok();
             }
             else
@@ -91,7 +159,9 @@ namespace WashMyCar.API.Controllers
 
             var user = new User
             {
-                UserName = registration.Username
+                UserName = registration.Username,
+                Email = registration.EmailAddress,
+                PhoneNumber = registration.Cellphone
             };
 
             var detailer = new Detailer
@@ -110,6 +180,8 @@ namespace WashMyCar.API.Controllers
 
             if (result.Succeeded)
             {
+                _userManager.AddToRole(user.Id, "Detailer");
+
                 return Ok();
             }
             else
