@@ -8,7 +8,7 @@ using WashMyCar.API.Utility;
 
 namespace WashMyCar.API.Controllers
 {
-    public class UsersController : ApiController
+    public class UsersController : BaseApiController
     {
         private UserManager<User> _userManager;
 
@@ -19,6 +19,26 @@ namespace WashMyCar.API.Controllers
 
             _userManager = new UserManager<User>(store);
         }
+
+        // GET: api/customerProfile
+        [Route("api/customerProfile")]
+        public IHttpActionResult GetCustomerProfile()
+        {
+            if(CurrentUser.Customer == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new
+            {
+                CurrentUser.Customer.Address,
+                CurrentUser.Customer.Cellphone,
+                CurrentUser.Customer.EmailAddress
+            });
+        }
+
+        // GET: api/detailerProfile
+        // TODO: Copy GetCustomerProfile and modify to work for detailers
 
         // POST: api/users/register
         [AllowAnonymous]
@@ -32,7 +52,7 @@ namespace WashMyCar.API.Controllers
 
             var user = new User
             {
-                UserName = registration.EmailAddress
+                UserName = registration.Username
             };
 
             var customer = new Customer
@@ -71,7 +91,7 @@ namespace WashMyCar.API.Controllers
 
             var user = new User
             {
-                UserName = registration.EmailAddress
+                UserName = registration.Username
             };
 
             var detailer = new Detailer

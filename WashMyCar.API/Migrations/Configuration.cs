@@ -14,6 +14,7 @@ namespace WashMyCar.API.Migrations
     using Microsoft.AspNet.Identity;
     using System.Data.Entity.Spatial;
     using WashMyCar.API.Utility;
+    using System.Collections.Generic;
 
     internal sealed class Configuration : DbMigrationsConfiguration<WashMyCar.API.Data.WashMyCarDataContext>
     {
@@ -28,6 +29,7 @@ namespace WashMyCar.API.Migrations
         {
             var userStore = new UserStore<User>(context);
             var userManager = new UserManager<User>(userStore);
+            Random random = new Random();
 
             string[] addresses = new string[]
             {
@@ -49,6 +51,30 @@ namespace WashMyCar.API.Migrations
                 {
                     Name = "Customer"
                 });
+
+                context.SaveChanges();
+            }
+            if (context.Services.Count() == 0)
+            {
+                Dictionary<string, decimal> services = new Dictionary<string, decimal>() {
+                   { "Handwash", 39.99M},
+                   { "Handwax", 69.99M},
+                   { "Complete Interior", 129.99M},
+                   { "Complete Exterior", 179.99M},
+                   { "Steam Clean Interior", 119.99M},
+                   { "Leather Treatment", 59.99M},
+                   { "Deluxe Detail", 239.99M},
+                   { "Light and Rim Restoration", 49.99M}
+               };
+
+                foreach (KeyValuePair<string, decimal> service in services)
+                {
+                    context.Services.Add(new Service
+                    {
+                        ServiceType = service.Key,
+                        Cost = service.Value
+                    });
+                }
 
                 context.SaveChanges();
             }
@@ -85,7 +111,7 @@ namespace WashMyCar.API.Migrations
                     string email = Faker.InternetFaker.Email();
                     string phone = Faker.PhoneFaker.Phone();
 
-                    userManager.Create(new User
+                    var user = new User
                     {
                         Email = email,
                         PhoneNumber = phone,
@@ -99,8 +125,10 @@ namespace WashMyCar.API.Migrations
                             Address = addresses[i],
                             Location = LocationConverter.GeocodeAddress(addresses[i])
                         }
+                    };
 
-                    }, "password123");
+                    userManager.Create(user, "password123");
+                    userManager.AddToRole(user.Id, "Customer");
                 }
             }
             if (context.Detailers.Count() == 0)
@@ -132,25 +160,28 @@ namespace WashMyCar.API.Migrations
                     }
 
                     // services
-                    string[] servicetype = new string[] { "Handwash", "Handwax", "Complete Interior", "Complete Exterior", "Steam Clean Interior", "Leather Treatment", "Deluxe Detail", "Light and Rim Restoration" };
-                    decimal[] cost = new decimal[] { 39.99M, 69.99M, 129.99M, 179.99M, 119.99M, 59.99M, 239.99M, 49.99M };
-
-                    for(int j = 0; j < Faker.NumberFaker.Number(1,servicetype.Length); j++)
+                    for (int j = 0; j < Faker.NumberFaker.Number(1, context.Services.Count()); j++)
                     {
-                        detailer.Services.Add(new Service
+                        // grab a random service from db
+                        var service = context.Services.Find(j + 1);
+                        if (detailer.DetailerServices.All(x => x.ServiceId != service.ServiceId))
                         {
-                            Cost = cost[j],
-                            ServiceType = servicetype[j]
-                        });   
+                            detailer.DetailerServices.Add(new DetailerService
+                            {
+                                Service = service
+                            });
+                        }
                     }
 
-                    userManager.Create(new User
+                    var user = new User
                     {
                         Email = email,
                         PhoneNumber = phone,
                         UserName = $"detailer{i + 1}",
                         Detailer = detailer
-                    }, "password123");
+                    };
+                    userManager.Create(user, "password123");
+                    userManager.AddToRole(user.Id, "Detailer");
                 }
             }
             if (context.Appointments.Count() == 0)
@@ -175,11 +206,11 @@ namespace WashMyCar.API.Migrations
                         };
 
                         // services
-                        for(int j = 0; j < Faker.NumberFaker.Number(1, detailer.Services.Count); j++)
+                        for(int j = 0; j < Faker.NumberFaker.Number(1, context.Services.Count()); j++)
                         {
                             appt.AppointmentServices.Add(new AppointmentService
                             {
-                                Service = detailer.Services.ToArray()[j]
+                                Service = context.Services.ToArray()[j]
                             });
                         }
 

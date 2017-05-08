@@ -26,6 +26,7 @@ namespace WashMyCar.API.Data
         public IDbSet<Service> Services { get; set; }
         public IDbSet<VehicleType> VehicleTypes { get; set; }
         public IDbSet<AppointmentService> AppointmentServices { get; set; }
+        public IDbSet<DetailerService> DetailerServices { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -42,19 +43,24 @@ namespace WashMyCar.API.Data
                 .HasForeignKey(appointment => appointment.CustomerId);
 
             modelBuilder.Entity<Models.DayOfWeek>()
-                .HasMany(dayOfWeek => dayOfWeek.DetailersAvailability)
+                .HasMany(dayOfWeek => dayOfWeek.DetailersAvailabilities)
                 .WithRequired(detailersAvailability => detailersAvailability.DayOfWeek)
                 .HasForeignKey(detailersAvailability => detailersAvailability.DayOfWeekId);
+
+            modelBuilder.Entity<Service>()
+                .HasMany(service => service.DetailerServices)
+                .WithRequired(detailerService => detailerService.Service)
+                .HasForeignKey(detailerService => detailerService.ServiceId);
+
+            modelBuilder.Entity<Detailer>()
+                .HasMany(detailer => detailer.DetailerServices)
+                .WithRequired(detailerService => detailerService.Detailer)
+                .HasForeignKey(detailerService => detailerService.DetailerId);
 
             modelBuilder.Entity<Detailer>()
                 .HasMany(detailer => detailer.DetailerAvailabilities)
                 .WithRequired(detailersAvailability => detailersAvailability.Detailer)
                 .HasForeignKey(detailersAvailability => detailersAvailability.DetailerId);
-
-            modelBuilder.Entity<Detailer>()
-                .HasMany(detailer => detailer.Services)
-                .WithOptional(service => service.Detailer)
-                .HasForeignKey(service => service.DetailerId);
 
             modelBuilder.Entity<Detailer>()
                 .HasMany(detailer => detailer.Appointments)
@@ -84,6 +90,9 @@ namespace WashMyCar.API.Data
 
             modelBuilder.Entity<DetailerAvailability>()
                         .HasKey(a => new { a.DetailerId, a.DayOfWeekId });
+
+            modelBuilder.Entity<DetailerService>()
+                .HasKey(a => new { a.DetailerId, a.ServiceId });
 
             base.OnModelCreating(modelBuilder);
         }

@@ -10,7 +10,7 @@ namespace WashMyCar.API.Models
     {
         public DayOfWeek()
         {
-            DetailersAvailability = new Collection<DetailerAvailability>();
+            DetailersAvailabilities = new Collection<DetailerAvailability>();
         }
 
         //scalar properties
@@ -18,6 +18,6 @@ namespace WashMyCar.API.Models
         public string Weekday { get; set; }
 
         //navigation properties
-        public virtual ICollection<DetailerAvailability> DetailersAvailability { get; set; }
+        public virtual ICollection<DetailerAvailability> DetailersAvailabilities { get; set; }
     }
 }

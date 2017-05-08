@@ -27,7 +27,7 @@ namespace WashMyCar.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (appointmentId != appointmentService.AppointmentId || serviceId != appointmentService.AppointmentId)
+            if (appointmentId != appointmentService.AppointmentId || serviceId != appointmentService.ServiceId)
             {
                 return BadRequest();
             }

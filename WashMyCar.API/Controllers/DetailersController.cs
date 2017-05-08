@@ -10,6 +10,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using WashMyCar.API.Data;
 using WashMyCar.API.Models;
+using WashMyCar.API.Utility;
 
 namespace WashMyCar.API.Controllers
 {
@@ -20,19 +21,51 @@ namespace WashMyCar.API.Controllers
         // GET: api/Detailers
         public IHttpActionResult GetDetailers()
         {
-            var resultSet = db.Detailers.Select(detailer => new
+            var resultSet = db.Detailers.ToArray().Select(detailer => new
             {
                 detailer.DetailerId,
-                detailer.Rating
+                detailer.Rating,
+                detailer.Address,
+                detailer.EmailAddress,
+                detailer.Cellphone,
+                detailer.FirstName,
+                detailer.LastName,
+                Availability = detailer.DetailerAvailabilities.Select(da => new
+                {
+                    DayOfWeek = da.DayOfWeek.Weekday,
+                    da.DayOfWeekId,
+                    da.DetailerId,
+                    da.Start,
+                    da.End
+                }),
+                Services = detailer.DetailerServices.Select(ds => new
+                {
+                    ds.Service.Cost,
+                    ds.Service.ServiceType
+                }),
+                Location = new
+                {
+                    detailer.Location.Latitude,
+                    detailer.Location.Longitude
+                },
+                Appointments = detailer.Appointments.Select(da => new
+                {
+                    da.Customer.FirstName,
+                    da.Customer.LastName,
+                    da.Customer.Address,
+                    da.AppointmentDate,
+                    da.Customer.Cellphone
+                })
             });
 
             return Ok(resultSet);
         }
 
-        // GET: api/Detailers/5
-        [Authorize, ResponseType(typeof(Detailer))]
+        // GET: api/Detailers/
+        [ResponseType(typeof(Detailer))]
         public IHttpActionResult GetDetailer(int id)
         {
+            
             Detailer detailer = db.Detailers.Find(id);
             if (detailer == null)
             {
@@ -42,7 +75,39 @@ namespace WashMyCar.API.Controllers
             return Ok(new
             {
                 detailer.DetailerId,
-                detailer.Rating
+                detailer.Rating,
+                detailer.Address,
+                detailer.EmailAddress,
+                detailer.Cellphone,
+                Availability = detailer.DetailerAvailabilities.Select(da => new
+                {
+                    DayOfWeek = da.DayOfWeek.Weekday,
+                    da.Start,
+                    da.DayOfWeekId,
+                    da.DetailerId,
+                    da.End
+                }),
+                detailer.FirstName,
+                detailer.LastName,
+                Services = detailer.DetailerServices.Select(ds => new
+                {
+                    ds.Service.Cost,
+                    ds.Service.ServiceType
+                }),
+                Location = new
+                {
+                    detailer.Location.Latitude,
+                    detailer.Location.Longitude
+                },
+                Appointments = detailer.Appointments.Select(da => new
+                {
+                    da.Customer.FirstName,
+                    da.Customer.LastName,
+                    da.Customer.Address,
+                    da.AppointmentDate,
+                    da.Customer.Cellphone
+                })
+                // add securite routes
             });
         }
 
@@ -62,6 +127,22 @@ namespace WashMyCar.API.Controllers
 
             var dbDetailer = db.Detailers.Find(id);
             dbDetailer.DetailerId = detailer.DetailerId;
+            dbDetailer.FirstName = detailer.FirstName;
+            dbDetailer.LastName = detailer.LastName;
+            dbDetailer.Address = detailer.Address;
+            dbDetailer.EmailAddress = detailer.EmailAddress;
+            // Loops over the incoming availabilities
+            foreach (var Availability in detailer.DetailerAvailabilities)
+            {
+                // For each on grab databases version of availability
+                var dbAvailability = dbDetailer.DetailerAvailabilities.FirstOrDefault(avail => avail.DetailerId == Availability.DetailerId && avail.DayOfWeekId == Availability.DayOfWeekId);
+                // Update databases version with new info
+                dbAvailability.Start = Availability.Start;
+                dbAvailability.End = Availability.End;
+
+            }
+            dbDetailer.Cellphone = detailer.Cellphone;
+            dbDetailer.Location = LocationConverter.GeocodeAddress(dbDetailer.Address);
 
             db.Entry(dbDetailer).State = EntityState.Modified;
 
@@ -99,7 +180,30 @@ namespace WashMyCar.API.Controllers
             return CreatedAtRoute("DefaultApi", new { id = detailer.DetailerId }, new
             {
                 detailer.DetailerId,
-                detailer.Rating
+                detailer.Rating,
+                detailer.Address,
+                detailer.EmailAddress,
+                Availability = detailer.DetailerAvailabilities.Select(da => new
+                {
+                    DayOfWeek = da.DayOfWeek.Weekday,
+                    da.Start,
+                    da.DayOfWeekId,
+                    da.DetailerId,
+                    da.End
+                }),
+                detailer.Cellphone,
+                detailer.FirstName,
+                detailer.LastName,
+                Services = detailer.DetailerServices.Select(ds => new
+                {
+                    ds.Service.Cost,
+                    ds.Service.ServiceType
+                }),
+                Location = new
+                {
+                    detailer.Location.Latitude,
+                    detailer.Location.Longitude
+                }
             });
             
         }

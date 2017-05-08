@@ -30,7 +30,13 @@ namespace WashMyCar.API.Controllers
                 customer.Address,
                 customer.EmailAddress,
                 customer.Cellphone,
-                customer.Location
+                Location = new
+                {
+                    customer.Location.Latitude,
+                    customer.Location.Longitude
+                },
+                // add appoints here.
+                // add securite routes
             });
             return Ok(resultSet);
         }
@@ -53,7 +59,22 @@ namespace WashMyCar.API.Controllers
                 customer.Address,
                 customer.EmailAddress,
                 customer.Cellphone,
-                customer.Location
+                Location = new
+                {
+                    customer.Location.Latitude,
+                    customer.Location.Longitude
+                },
+                Appointments = customer.Appointments.Select(ca => new {
+                    ca.AppointmentDate,
+                    ca.DetailerId,
+                    ca.Detailer.FirstName,
+                    ca.Detailer.LastName,
+                    ca.TotalCost,
+                    ca.VehicleType.VehicleSize,
+                    ca.Rating,
+                    ca.VehicleTypeId
+                })
+                
             });
         }
 
@@ -79,6 +100,7 @@ namespace WashMyCar.API.Controllers
             dbCustomer.EmailAddress = customer.EmailAddress;
             dbCustomer.Cellphone = customer.Cellphone;
             dbCustomer.Location = LocationConverter.GeocodeAddress(dbCustomer.Address);
+            dbCustomer.Appointments = customer.Appointments;
 
             db.Entry(dbCustomer).State = EntityState.Modified;
 

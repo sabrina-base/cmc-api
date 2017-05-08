@@ -86,8 +86,14 @@
     <Reference Include="Microsoft.Owin.Security.OAuth, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.2.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Swashbuckle.Core.5.5.3\lib\net40\Swashbuckle.Core.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -115,6 +121,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -134,20 +143,27 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AppointmentsController.cs" />
     <Compile Include="Controllers\AppointmentServicesController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\DayOfWeeksController.cs" />
     <Compile Include="Controllers\DetailersController.cs" />
+    <Compile Include="Controllers\DetailerServicesController.cs" />
+    <Compile Include="Controllers\ResultsController.cs" />
     <Compile Include="Controllers\ServicesController.cs" />
     <Compile Include="Controllers\DetailerAvailabilitiesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\VehicleTypesController.cs" />
     <Compile Include="Data\WashMyCarDataContext.cs" />
-    <Compile Include="Migrations\201704182145437_InitialMigration.cs" />
-    <Compile Include="Migrations\201704182145437_InitialMigration.Designer.cs">
-      <DependentUpon>201704182145437_InitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201704201710478_InitialMigration.cs" />
+    <Compile Include="Migrations\201704201710478_InitialMigration.Designer.cs">
+      <DependentUpon>201704201710478_InitialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704202218494_MappedMoreInfo.cs" />
+    <Compile Include="Migrations\201704202218494_MappedMoreInfo.Designer.cs">
+      <DependentUpon>201704202218494_MappedMoreInfo.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Appointment.cs" />
@@ -156,7 +172,9 @@
     <Compile Include="Models\DayOfWeek.cs" />
     <Compile Include="Models\Detailer.cs" />
     <Compile Include="Models\DetailerAvailability.cs" />
+    <Compile Include="Models\DetailerService.cs" />
     <Compile Include="Models\Person.cs" />
+    <Compile Include="Models\Preference.cs" />
     <Compile Include="Models\Service.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\VehicleType.cs" />
@@ -165,6 +183,7 @@
     <Compile Include="RegistrationModel.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utility\LocationConverter.cs" />
+    <Compile Include="Utility\BaseApiController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -179,8 +198,11 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704182145437_InitialMigration.resx">
-      <DependentUpon>201704182145437_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704201710478_InitialMigration.resx">
+      <DependentUpon>201704201710478_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704202218494_MappedMoreInfo.resx">
+      <DependentUpon>201704202218494_MappedMoreInfo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

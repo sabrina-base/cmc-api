@@ -5,6 +5,9 @@ namespace WashMyCar.API.Models
     public class RegistrationModel
     {
         [Required]
+        public string Username { get; set; }
+
+        [Required]
         public string EmailAddress { get; set; }
 
         [Required, MinLength(8), DataType(DataType.Password)]

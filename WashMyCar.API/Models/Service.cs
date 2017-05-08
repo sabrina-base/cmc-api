@@ -10,17 +10,17 @@ namespace WashMyCar.API.Models
     {
         public Service()
         {
+            DetailerServices = new Collection<DetailerService>();
             AppointmentServices = new Collection<AppointmentService>();
         }
 
         //scalar properties
         public int ServiceId { get; set; }
-        public int? DetailerId { get; set; }
         public string ServiceType { get; set; }
         public decimal Cost { get; set; }
 
         //navigation properties
-        public virtual Detailer Detailer { get; set; }
+        public virtual ICollection<DetailerService> DetailerServices { get; set; }
         public virtual ICollection<AppointmentService> AppointmentServices { get; set; }
     }
 }
